@@ -242,7 +242,112 @@ namespace lab1_sort
             Console.ReadKey();
             Menu();
         }
-        
+        public static void sortByCodeDouble()
+        {
+            Console.Clear();
+            Console.WriteLine("Параметры для первого массива");
+            Console.WriteLine("Введите нужное количество строк в массиве");
+            int n = int.Parse(Console.ReadLine());
+            Console.WriteLine("Введите нужное количество столбцов в массиве");
+            int m = int.Parse(Console.ReadLine());
+            int[,] a_sortByCodeDouble = new int[n,m];
+            int max, min;
+            int pillar_maxInd, pillar_minInd, l_maxInd, l_minInd;
+
+            max = 0; min = 0;
+            pillar_maxInd = 0; pillar_minInd=0;
+            l_maxInd = 0; l_minInd = 0;
+
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < m; j++)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Массив 1\nВведите элемент для {0} строки, {1} столбца", i, j);
+                    a_sortByCodeDouble[i,j] = int.Parse(Console.ReadLine());
+                    max = a_sortByCodeDouble[i, j];
+                    min = a_sortByCodeDouble[i, j];
+                    pillar_maxInd = j; pillar_minInd = j;
+                    l_maxInd = i; l_minInd = i;
+                }
+            }
+            Console.Clear();
+
+            Console.WriteLine("Параметры для второго массива");
+            Console.WriteLine("Введите нужное количество строк в массиве");
+            int n2 = int.Parse(Console.ReadLine());
+            Console.WriteLine("Введите нужное количество столбцов в массиве");
+            int m2 = int.Parse(Console.ReadLine());
+            int[,] a_sortByCodeDouble2 = new int[n2, m2];
+
+            Console.Clear();
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < m; j++)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Массив 2\nВведите элемент для {0} строки, {1} столбца", i, j);
+                    a_sortByCodeDouble2[i, j] = int.Parse(Console.ReadLine());
+                }
+            }
+            Console.Clear();
+
+            Console.WriteLine("Вывожу массив 1:");
+            for (int i = 0; i < n; i++)
+            {
+                Console.WriteLine();
+                for (int j = 0; j < m; j++)
+                {
+                    Console.Write("{0}\t",a_sortByCodeDouble[i,j]);
+                }
+            }
+
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < m; j++)
+                {
+                    if (max < a_sortByCodeDouble[i, j])
+                    {
+                        max = a_sortByCodeDouble[i, j];
+                        l_maxInd = i;
+                        pillar_maxInd = j;
+                    }
+                    if (min > a_sortByCodeDouble[i, j])
+                    {
+                        min = a_sortByCodeDouble[i,j];
+                        l_minInd = i;
+                        pillar_minInd = j;
+                    }
+                }
+            }
+
+            Console.WriteLine("\n\nМаксимальное значение: \nИндекс: {0};{1}\tЗначение: {2}", l_maxInd, pillar_maxInd, max);
+            Console.WriteLine("\nМинимальное значение:  \nИндекс: {0};{1}\tЗначение: {2}", l_minInd, pillar_minInd, min);
+            int summ_a1=0;
+            int summ_a2=0;
+
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < m; j++)
+                {
+                    summ_a1 += a_sortByCodeDouble[i,j];
+                }
+            }
+
+            for (int i = 0; i < n2; i++)
+            {
+                for (int j = 0; j < m2; j++)
+                {
+                    summ_a2 += a_sortByCodeDouble2[i, j];
+                }
+            }
+
+            Console.WriteLine("Произведение двух массивов: {0}\nРазность двух массивов: {1}\nСумма двух массивов: {2}",
+                summ_a1*summ_a2,summ_a1-summ_a2,summ_a1+summ_a2);
+
+            Console.ReadKey();
+            Menu();
+        }
         #endregion
         static void Main(string[] args)
         {
