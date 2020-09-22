@@ -1,0 +1,186 @@
+namespace lab1_sort
+{
+    class Program
+    {
+        #region ничего
+        public static void Menu()
+        {
+            Int32 Coice = 0, key = 0;
+            do
+            {
+                Console.Clear();
+                Console.WriteLine("Выбор сортировки");
+                Console.WriteLine(((Coice == 0) ? ">> " : " ") + "Сортировка одномерного массива");
+                Console.WriteLine(((Coice == 1) ? ">> " : " ") + "Сортировка одномерного массива с использованием свойств и методов");
+                Console.WriteLine(((Coice == 2) ? ">> " : " ") + "Сортировка двумерного массива");
+                Console.WriteLine(((Coice == 3) ? ">> " : " ") + "Сортировка ступенчатого массива");
+
+                key = (int)Console.ReadKey().Key;
+                if (key == 38) Coice--;
+                if (key == 40) Coice++;
+                if (key == 13) break;
+
+                if (Coice < 0) Coice = 3;
+                if (Coice > 3) Coice = 0;
+
+            } while (key != 27);
+            Console.WriteLine(Coice);
+            if (Coice == 0)
+            {
+                sortByCode();
+            }
+            Console.WriteLine(Coice);
+            if (Coice == 1)
+            {
+                sortByCodeArray();
+            }
+            Console.WriteLine(Coice);
+            if (Coice == 2)
+            {
+                sortByCodeDouble();
+            }
+            Console.WriteLine(Coice);
+            if (Coice == 3)
+            {
+
+            }
+        }
+        public static void sortByCode()
+        {
+            Console.Clear();
+            Console.WriteLine("Введите нужное количество элементов в массиве");
+            int n = int.Parse(Console.ReadLine());
+            int[] a_sortByCode = new int[n];
+            
+            int inMin=0;
+            int inMax=0;
+            int Min;
+            int Max;
+
+            for (int i = 0; i < n; i++)
+            {
+                Console.Clear();
+                Console.WriteLine("Введите {0} элемент", i);
+                a_sortByCode[i] = int.Parse(Console.ReadLine());
+            }
+
+            Min = a_sortByCode[0];
+            Max = a_sortByCode[0];
+
+            for (int i = 0; i < a_sortByCode.Length; i++)
+            {
+                if (Max < a_sortByCode[i])
+                {
+                    Max = a_sortByCode[i];
+                    inMax = i;
+                }
+
+                if (inMin > a_sortByCode[i])
+                {
+                    Min = a_sortByCode[i];
+                    inMin = i;
+                }
+            }
+
+            Console.Clear();
+            Console.WriteLine("Вывожу массив: ");
+            foreach (var item in a_sortByCode)
+            {
+                Console.Write("{0}\t", item);
+            }
+
+            Console.WriteLine("\n\nСамое большое число\nИндекс:{0} Значение: {1}", inMax, Max);
+            Console.WriteLine("\nСамое маленькое число\nИндекс:{0} Значение: {1}", inMin, Min);
+
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = i; j < n; j++)
+                {
+                    if (a_sortByCode[i] > a_sortByCode[j])
+                    {
+                        int temp = a_sortByCode[i];
+                        a_sortByCode[i] = a_sortByCode[j];
+                        a_sortByCode[j] = temp;
+                    }
+                }
+            }
+            
+            Console.WriteLine("\n\nПо возрастанию:");
+            foreach (var item in a_sortByCode)
+            {
+                Console.Write("{0}\t", item);
+            }
+
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = i; j < n; j++)
+                {
+                    if (a_sortByCode[i] < a_sortByCode[j])
+                    {
+                        int temp = a_sortByCode[i];
+                        a_sortByCode[i] = a_sortByCode[j];
+                        a_sortByCode[j] = temp;
+                    }
+                }
+            }
+            Console.WriteLine("\n\nПо убыванию:");
+            foreach (var item in a_sortByCode)
+            {
+                Console.Write("{0}\t", item);
+            }
+
+            Console.WriteLine("\n\nЧетные:");
+            int n2 = 0;
+            for (int i = 0; i < n; i++)
+            {
+                if (a_sortByCode[i] % 2 == 0)
+                {
+                    n2++;
+                }
+            }
+            if (n2 == 0)
+            {
+                Console.WriteLine("В массиве не было четных чисел.");
+            }
+            else {
+                for (int i = 0; i < n; i++)
+                {
+                    for (int j = i; j < n; j++)
+                    {
+                        if (a_sortByCode[i] > a_sortByCode[j])
+                        {
+                            int temp = a_sortByCode[i];
+                            a_sortByCode[i] = a_sortByCode[j];
+                            a_sortByCode[j] = temp;
+                        }
+                    }
+                }
+                Array.Sort(a_sortByCode);
+                int[] a_sortByCode_even = new int[n2];
+                int f=0;
+                for (int k = 0; k < n; k++)
+                {
+                    if (a_sortByCode[k] % 2 == 0)
+                    {
+                        a_sortByCode_even[f] = a_sortByCode[k];
+                        f++;
+                    }
+                    else { }
+                }
+                for (int i = 0; i < n2; i++)
+                {
+                    Console.Write("{0}\t", a_sortByCode_even[i]);
+                }
+
+            }
+            Console.ReadKey();
+            Menu();
+        }
+        
+        #endregion
+        static void Main(string[] args)
+        {
+            Menu();
+        }
+    }
+}
