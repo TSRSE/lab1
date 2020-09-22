@@ -176,6 +176,72 @@ namespace lab1_sort
             Console.ReadKey();
             Menu();
         }
+        public static void sortByCodeArray()
+        {
+            Console.Clear();
+            Console.WriteLine("Введите нужное количество элементов в массиве");
+            int n = int.Parse(Console.ReadLine());
+            int[] a_sortByCodeArray = new int[n];
+
+            for (int i = 0; i < n; i++)
+            {
+                Console.Clear();
+                Console.WriteLine("Введите {0} элемент", i);
+                a_sortByCodeArray[i] = int.Parse(Console.ReadLine());
+            }
+
+            Console.WriteLine("Вывожу массив");
+            foreach (var item in a_sortByCodeArray)
+            {
+                Console.Write("{0}\t",item);
+            }
+
+            Console.WriteLine("\n\nМаксимальное значение: \nИндекс: {0}\tЗначение: {1}", Array.IndexOf(a_sortByCodeArray, a_sortByCodeArray.Max()),a_sortByCodeArray.Max());
+            Console.WriteLine("\n\nМинимальное значение: \nИндекс: {0}\tЗначение: {1}", Array.IndexOf(a_sortByCodeArray,a_sortByCodeArray.Min()),a_sortByCodeArray.Min());
+
+            Array.Sort(a_sortByCodeArray);
+            Console.WriteLine("\n\nСортировка по возрастанию");
+            foreach (var item in a_sortByCodeArray)
+            {
+                Console.Write("{0}\t",item);
+            }
+
+            Array.Reverse(a_sortByCodeArray);
+            Console.WriteLine("\n\nСортировка по убыванию");
+            foreach (var item in a_sortByCodeArray)
+            {
+                Console.Write("{0}\t", item);
+            }
+
+            Console.WriteLine("Вывод четных чисел массива");
+            Array.Sort(a_sortByCodeArray);
+            int counter = 0;
+            for (int i = 0; i < a_sortByCodeArray.Length; i++)
+            {
+                if (a_sortByCodeArray[i] % 2 == 0)
+                {
+                    counter++;
+                }
+            }
+            if (counter == 0)
+            {
+                Console.WriteLine("В массиве нет четных чисел.");
+            }
+            else { 
+                int[] a_sortByCodeArray_even = new int[counter];
+                counter = 0;
+                for (int i = 0; i < a_sortByCodeArray.Length; i++)
+                {
+                    if (a_sortByCodeArray[i] % 2 == 0)
+                    {
+                        a_sortByCodeArray_even[counter] = a_sortByCodeArray[i];
+                        counter++;
+                    }
+                }
+            }
+            Console.ReadKey();
+            Menu();
+        }
         
         #endregion
         static void Main(string[] args)
