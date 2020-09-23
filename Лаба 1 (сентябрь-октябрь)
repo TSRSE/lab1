@@ -1,7 +1,18 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
 namespace lab1_sort
 {
     class Program
     {
+        public static void Name()
+        {
+            //code
+        }
+
         #region ничего
         public static void Menu()
         {
@@ -42,11 +53,12 @@ namespace lab1_sort
             Console.WriteLine(Coice);
             if (Coice == 3)
             {
-
+                sortByCodeStep();
             }
         }
         public static void sortByCode()
         {
+
             Console.Clear();
             Console.WriteLine("Введите нужное количество элементов в массиве");
             int n = int.Parse(Console.ReadLine());
@@ -67,7 +79,7 @@ namespace lab1_sort
             Min = a_sortByCode[0];
             Max = a_sortByCode[0];
 
-            for (int i = 0; i < a_sortByCode.Length; i++)
+            for (int i = 0; i < a_sortByCode.Length; i++) 
             {
                 if (Max < a_sortByCode[i])
                 {
@@ -213,7 +225,7 @@ namespace lab1_sort
                 Console.Write("{0}\t", item);
             }
 
-            Console.WriteLine("Вывод четных чисел массива");
+            Console.WriteLine("\nВывод четных чисел массива");
             Array.Sort(a_sortByCodeArray);
             int counter = 0;
             for (int i = 0; i < a_sortByCodeArray.Length; i++)
@@ -237,6 +249,11 @@ namespace lab1_sort
                         a_sortByCodeArray_even[counter] = a_sortByCodeArray[i];
                         counter++;
                     }
+                }
+
+                foreach (var item in a_sortByCodeArray_even)
+                {
+                    Console.Write("{0}\t",item);
                 }
             }
             Console.ReadKey();
@@ -281,9 +298,9 @@ namespace lab1_sort
             int[,] a_sortByCodeDouble2 = new int[n2, m2];
 
             Console.Clear();
-            for (int i = 0; i < n; i++)
+            for (int i = 0; i < n2; i++)
             {
-                for (int j = 0; j < m; j++)
+                for (int j = 0; j < m2; j++)
                 {
                     Console.Clear();
                     Console.WriteLine("Массив 2\nВведите элемент для {0} строки, {1} столбца", i, j);
@@ -342,11 +359,87 @@ namespace lab1_sort
                 }
             }
 
-            Console.WriteLine("Произведение двух массивов: {0}\nРазность двух массивов: {1}\nСумма двух массивов: {2}",
+            Console.WriteLine("\nПроизведение двух массивов: {0}\nРазность двух массивов: {1}\nСумма двух массивов: {2}",
                 summ_a1*summ_a2,summ_a1-summ_a2,summ_a1+summ_a2);
 
             Console.ReadKey();
             Menu();
+        }
+        public static void sortByCodeStep()
+        {
+            Console.Clear();
+            Console.WriteLine("Выберите количество массивов для массива");
+            int n = int.Parse(Console.ReadLine());
+            int[][] a_sortbysteps = new int [n][];
+            int min = 0;
+            int max = 0;
+            int l = 0;
+
+            for (int i = 0; i < n; i++)
+            {
+                Console.WriteLine("Выберите кол-во элементов для массива {0}",i);
+                l = int.Parse(Console.ReadLine());
+                a_sortbysteps[i] = new int[l];
+            }
+
+            for (int i = 0; i < l; i++)
+            {
+                for (int j = 0; j < a_sortbysteps[i].Length; j++)
+                {
+                    Console.Write("\nМассив {0}, элемент {1}: ",i,j);
+                    a_sortbysteps[i][j] = int.Parse(Console.ReadLine());
+                    max = a_sortbysteps[i][j];
+                    min = a_sortbysteps[i][j];
+                }
+            }
+            Console.Clear();
+
+            Console.Write("Перед тем, как продолжить, вы хотите изменить данные элементов в массиве?[Y/n]");
+
+            string answer = Console.ReadLine();
+            Console.Clear();
+
+            if (answer.ToUpper().Contains("Y"))
+            {
+                bool ischanging = true;
+                while (ischanging == true)
+                {
+                    Console.Clear();
+                    Console.Write("Введите номер(индекс) массива: ");
+                    int number = int.Parse(Console.ReadLine());
+
+                    foreach (var item in a_sortbysteps[number])
+                    {
+                        Console.Write("{0}\t", item);
+                    }
+                    int _index = int.Parse(Console.ReadLine());
+                    Console.Write("\nЗаменить число {0} на ", a_sortbysteps[number][_index]);
+                    a_sortbysteps[number][_index] = int.Parse(Console.ReadLine());
+                    Console.Clear();
+                    Console.WriteLine("Введите Enter, чтобы продолжить и ESQ чтобы выйти из редактора массивов.");
+
+                    int key = (int)Console.ReadKey().Key;
+                    if (key == 27) 
+                        ischanging = false;
+                }
+            }
+
+            Console.WriteLine("Вывожу массив...");
+            for (int i = 0; i < l; i++)
+            {
+                Console.Write("\nМассив {0}\n", i);
+                for (int j = 0; j < a_sortbysteps.Length; j++)
+                {
+                        Console.Write("{0}\t",a_sortbysteps[i][j]);
+                        if (min > a_sortbysteps[i][j])
+                            min = a_sortbysteps[i][j];
+                        if (max < a_sortbysteps[i][j])
+                            max = a_sortbysteps[i][j];
+                }
+            }
+
+            Console.WriteLine("\n\nМаксимальное значение: {0}\nМинимальное значение: {1}", max, min);
+            Console.ReadKey();
         }
         #endregion
         static void Main(string[] args)
