@@ -1,18 +1,60 @@
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Security.Cryptography.X509Certificates;
 
 namespace lab1_sort
 {
-    class Program
+
+    class ReadFromFileRaw
     {
-        public static void Name()
+
+        public static int[] writeArray;
+
+        public static void SingleLinedArray()
         {
-            //code
+            string _Number="";
+            List<int> NumbersLis = new List<int>();
+            string default_path = @"C:\Users\Корсаков Данила\source\repos\lab1_sort\lab1_sort\bin\Debug\single.txt";
+            string[] LinesToRead = File.ReadAllLines(default_path);
+            writeArray = new int[LinesToRead.Length];
+            string FullLineOfArray = LinesToRead[0];
+
+            for (int i = 0; i < FullLineOfArray.LastIndexOf(';'); i++)
+            {
+                for (int j = 0; j < FullLineOfArray.IndexOf(';'); j++)
+                {
+                    _Number = _Number + FullLineOfArray.ElementAt(j);
+                    FullLineOfArray.Replace(FullLineOfArray.ElementAt(j), ' ');
+                }
+                
+                
+                NumbersLis.Add(int.Parse(_Number));
+
+                
+
+                for (int k = 0; k < FullLineOfArray.IndexOf(';')+1; k++)
+                {
+                    FullLineOfArray.Replace(_Number+"; ","");
+                }
+                Console.WriteLine(FullLineOfArray);
+                _Number = "";
+            }
+            foreach (var item in NumbersLis)
+            {
+                Console.WriteLine("{0}\t",item);
+            }
+            
+            Console.ReadKey();
+            
         }
 
+    }
+    class Program
+    {
         #region ничего
         public static void Menu()
         {
@@ -63,9 +105,9 @@ namespace lab1_sort
             Console.WriteLine("Введите нужное количество элементов в массиве");
             int n = int.Parse(Console.ReadLine());
             int[] a_sortByCode = new int[n];
-            
-            int inMin=0;
-            int inMax=0;
+
+            int inMin = 0;
+            int inMax = 0;
             int Min;
             int Max;
 
@@ -79,7 +121,7 @@ namespace lab1_sort
             Min = a_sortByCode[0];
             Max = a_sortByCode[0];
 
-            for (int i = 0; i < a_sortByCode.Length; i++) 
+            for (int i = 0; i < a_sortByCode.Length; i++)
             {
                 if (Max < a_sortByCode[i])
                 {
@@ -116,7 +158,7 @@ namespace lab1_sort
                     }
                 }
             }
-            
+
             Console.WriteLine("\n\nПо возрастанию:");
             foreach (var item in a_sortByCode)
             {
@@ -154,7 +196,8 @@ namespace lab1_sort
             {
                 Console.WriteLine("В массиве не было четных чисел.");
             }
-            else {
+            else
+            {
                 for (int i = 0; i < n; i++)
                 {
                     for (int j = i; j < n; j++)
@@ -169,7 +212,7 @@ namespace lab1_sort
                 }
                 Array.Sort(a_sortByCode);
                 int[] a_sortByCode_even = new int[n2];
-                int f=0;
+                int f = 0;
                 for (int k = 0; k < n; k++)
                 {
                     if (a_sortByCode[k] % 2 == 0)
@@ -205,17 +248,17 @@ namespace lab1_sort
             Console.WriteLine("Вывожу массив");
             foreach (var item in a_sortByCodeArray)
             {
-                Console.Write("{0}\t",item);
+                Console.Write("{0}\t", item);
             }
 
-            Console.WriteLine("\n\nМаксимальное значение: \nИндекс: {0}\tЗначение: {1}", Array.IndexOf(a_sortByCodeArray, a_sortByCodeArray.Max()),a_sortByCodeArray.Max());
-            Console.WriteLine("\n\nМинимальное значение: \nИндекс: {0}\tЗначение: {1}", Array.IndexOf(a_sortByCodeArray,a_sortByCodeArray.Min()),a_sortByCodeArray.Min());
+            Console.WriteLine("\n\nМаксимальное значение: \nИндекс: {0}\tЗначение: {1}", Array.IndexOf(a_sortByCodeArray, a_sortByCodeArray.Max()), a_sortByCodeArray.Max());
+            Console.WriteLine("\n\nМинимальное значение: \nИндекс: {0}\tЗначение: {1}", Array.IndexOf(a_sortByCodeArray, a_sortByCodeArray.Min()), a_sortByCodeArray.Min());
 
             Array.Sort(a_sortByCodeArray);
             Console.WriteLine("\n\nСортировка по возрастанию");
             foreach (var item in a_sortByCodeArray)
             {
-                Console.Write("{0}\t",item);
+                Console.Write("{0}\t", item);
             }
 
             Array.Reverse(a_sortByCodeArray);
@@ -239,7 +282,8 @@ namespace lab1_sort
             {
                 Console.WriteLine("В массиве нет четных чисел.");
             }
-            else { 
+            else
+            {
                 int[] a_sortByCodeArray_even = new int[counter];
                 counter = 0;
                 for (int i = 0; i < a_sortByCodeArray.Length; i++)
@@ -253,7 +297,7 @@ namespace lab1_sort
 
                 foreach (var item in a_sortByCodeArray_even)
                 {
-                    Console.Write("{0}\t",item);
+                    Console.Write("{0}\t", item);
                 }
             }
             Console.ReadKey();
@@ -267,12 +311,12 @@ namespace lab1_sort
             int n = int.Parse(Console.ReadLine());
             Console.WriteLine("Введите нужное количество столбцов в массиве");
             int m = int.Parse(Console.ReadLine());
-            int[,] a_sortByCodeDouble = new int[n,m];
+            int[,] a_sortByCodeDouble = new int[n, m];
             int max, min;
             int pillar_maxInd, pillar_minInd, l_maxInd, l_minInd;
 
             max = 0; min = 0;
-            pillar_maxInd = 0; pillar_minInd=0;
+            pillar_maxInd = 0; pillar_minInd = 0;
             l_maxInd = 0; l_minInd = 0;
 
             for (int i = 0; i < n; i++)
@@ -281,7 +325,7 @@ namespace lab1_sort
                 {
                     Console.Clear();
                     Console.WriteLine("Массив 1\nВведите элемент для {0} строки, {1} столбца", i, j);
-                    a_sortByCodeDouble[i,j] = int.Parse(Console.ReadLine());
+                    a_sortByCodeDouble[i, j] = int.Parse(Console.ReadLine());
                     max = a_sortByCodeDouble[i, j];
                     min = a_sortByCodeDouble[i, j];
                     pillar_maxInd = j; pillar_minInd = j;
@@ -315,7 +359,7 @@ namespace lab1_sort
                 Console.WriteLine();
                 for (int j = 0; j < m; j++)
                 {
-                    Console.Write("{0}\t",a_sortByCodeDouble[i,j]);
+                    Console.Write("{0}\t", a_sortByCodeDouble[i, j]);
                 }
             }
 
@@ -331,7 +375,7 @@ namespace lab1_sort
                     }
                     if (min > a_sortByCodeDouble[i, j])
                     {
-                        min = a_sortByCodeDouble[i,j];
+                        min = a_sortByCodeDouble[i, j];
                         l_minInd = i;
                         pillar_minInd = j;
                     }
@@ -340,14 +384,14 @@ namespace lab1_sort
 
             Console.WriteLine("\n\nМаксимальное значение: \nИндекс: {0};{1}\tЗначение: {2}", l_maxInd, pillar_maxInd, max);
             Console.WriteLine("\nМинимальное значение:  \nИндекс: {0};{1}\tЗначение: {2}", l_minInd, pillar_minInd, min);
-            int summ_a1=0;
-            int summ_a2=0;
+            int summ_a1 = 0;
+            int summ_a2 = 0;
 
             for (int i = 0; i < n; i++)
             {
                 for (int j = 0; j < m; j++)
                 {
-                    summ_a1 += a_sortByCodeDouble[i,j];
+                    summ_a1 += a_sortByCodeDouble[i, j];
                 }
             }
 
@@ -360,7 +404,7 @@ namespace lab1_sort
             }
 
             Console.WriteLine("\nПроизведение двух массивов: {0}\nРазность двух массивов: {1}\nСумма двух массивов: {2}",
-                summ_a1*summ_a2,summ_a1-summ_a2,summ_a1+summ_a2);
+                summ_a1 * summ_a2, summ_a1 - summ_a2, summ_a1 + summ_a2);
 
             Console.ReadKey();
             Menu();
@@ -370,14 +414,14 @@ namespace lab1_sort
             Console.Clear();
             Console.WriteLine("Выберите количество массивов для массива");
             int n = int.Parse(Console.ReadLine());
-            int[][] a_sortbysteps = new int [n][];
+            int[][] a_sortbysteps = new int[n][];
             int min = 0;
             int max = 0;
             int l = 0;
 
             for (int i = 0; i < n; i++)
             {
-                Console.WriteLine("Выберите кол-во элементов для массива {0}",i);
+                Console.WriteLine("Выберите кол-во элементов для массива {0}", i);
                 l = int.Parse(Console.ReadLine());
                 a_sortbysteps[i] = new int[l];
             }
@@ -386,7 +430,7 @@ namespace lab1_sort
             {
                 for (int j = 0; j < a_sortbysteps[i].Length; j++)
                 {
-                    Console.Write("\nМассив {0}, элемент {1}: ",i,j);
+                    Console.Write("\nМассив {0}, элемент {1}: ", i, j);
                     a_sortbysteps[i][j] = int.Parse(Console.ReadLine());
                     max = a_sortbysteps[i][j];
                     min = a_sortbysteps[i][j];
@@ -419,7 +463,7 @@ namespace lab1_sort
                     Console.WriteLine("Введите Enter, чтобы продолжить и ESQ чтобы выйти из редактора массивов.");
 
                     int key = (int)Console.ReadKey().Key;
-                    if (key == 27) 
+                    if (key == 27)
                         ischanging = false;
                 }
             }
@@ -430,11 +474,11 @@ namespace lab1_sort
                 Console.Write("\nМассив {0}\n", i);
                 for (int j = 0; j < a_sortbysteps.Length; j++)
                 {
-                        Console.Write("{0}\t",a_sortbysteps[i][j]);
-                        if (min > a_sortbysteps[i][j])
-                            min = a_sortbysteps[i][j];
-                        if (max < a_sortbysteps[i][j])
-                            max = a_sortbysteps[i][j];
+                    Console.Write("{0}\t", a_sortbysteps[i][j]);
+                    if (min > a_sortbysteps[i][j])
+                        min = a_sortbysteps[i][j];
+                    if (max < a_sortbysteps[i][j])
+                        max = a_sortbysteps[i][j];
                 }
             }
 
@@ -444,6 +488,7 @@ namespace lab1_sort
         #endregion
         static void Main(string[] args)
         {
+            ReadFromFileRaw.SingleLinedArray();
             Menu();
         }
     }
