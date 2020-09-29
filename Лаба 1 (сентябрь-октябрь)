@@ -7,19 +7,16 @@ using System.Threading.Tasks;
 
 namespace lab1_sort
 {
-
     class ReadFromFileRaw
     {
-
         public static int[] writeArray;
         public static bool readfromfile = false;
         public static void SingleLinedArray()
         {
             string _Number = "";
             List<int> NumbersList = new List<int>();
-            string default_path = @"C:\Users\maxim\source\repos\lab1_sort\lab1_sort\bin\Debug\single.txt";
+            string default_path = @"C:\Users\maxim\source\repos\lab1_sort\lab1_sort\bin\Debug\single.txt"; //Прямой путь к файлу, типизация файла: a; b; c;
             string[] LinesToRead = File.ReadAllLines(default_path);
-            
             string FullLineOfArray = LinesToRead[0];
 
             for (int i = 0; i < FullLineOfArray.LastIndexOf(';'); i++)
@@ -33,7 +30,6 @@ namespace lab1_sort
                 NumbersList.Add(int.Parse(_Number));
                 FullLineOfArray = FullLineOfArray.Remove(0, _Number.Length + 1);
 
-                //Console.WriteLine(FullLineOfArray);
                 _Number = "";
             }
             try {
@@ -56,7 +52,6 @@ namespace lab1_sort
             }
             writeArray = NumbersList.ToArray();
         }
-
     }
     class Program
     {
@@ -102,6 +97,16 @@ namespace lab1_sort
             {
                 sortByCodeStep();
             }
+        }
+        public static void AskForFileInput()
+        {
+            Console.Write("Вы хотите ввести данные из файла?[Y/n] ");
+            string Answer = Console.ReadLine();
+
+            if (Answer.ToUpper().Contains("Y"))
+                ReadFromFileRaw.readfromfile = true;
+            else
+                ReadFromFileRaw.readfromfile = false;
         }
         public static void sortByCode()
         {
@@ -248,18 +253,31 @@ namespace lab1_sort
         }
         public static void sortByCodeArray()
         {
+            int n;
+            int[] a_sortByCodeArray;
+
             Console.Clear();
-            Console.WriteLine("Введите нужное количество элементов в массиве");
-            int n = int.Parse(Console.ReadLine());
-            int[] a_sortByCodeArray = new int[n];
+            AskForFileInput();
+            Console.Clear();
 
-            for (int i = 0; i < n; i++)
+            if (ReadFromFileRaw.readfromfile == true)
             {
-                Console.Clear();
-                Console.WriteLine("Введите {0} элемент", i);
-                a_sortByCodeArray[i] = int.Parse(Console.ReadLine());
+                ReadFromFileRaw.SingleLinedArray();
+                a_sortByCodeArray = ReadFromFileRaw.writeArray;
+                n = a_sortByCodeArray.Length;
             }
+            else { 
+                Console.WriteLine("Введите нужное количество элементов в массиве");
+                n = int.Parse(Console.ReadLine());
+                a_sortByCodeArray = new int[n];
 
+                for (int i = 0; i < n; i++)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Введите {0} элемент", i);
+                    a_sortByCodeArray[i] = int.Parse(Console.ReadLine());
+                }
+            }
             Console.WriteLine("Вывожу массив");
             foreach (var item in a_sortByCodeArray)
             {
@@ -500,18 +518,7 @@ namespace lab1_sort
             Console.WriteLine("\n\nМаксимальное значение: {0}\nМинимальное значение: {1}", max, min);
             Console.ReadKey();
         }
-        public static void AskForFileInput()
-        {
-            
-            Console.Write("Вы хотите ввести данные из файла?[Y/n] ");
-            string Answer = Console.ReadLine();
-            if (Answer.ToUpper().Contains("Y"))
-            {
-                ReadFromFileRaw.readfromfile = true;
-            }
-            else
-                ReadFromFileRaw.readfromfile = false;
-        }
+
         #endregion
         static void Main(string[] args)
         {
