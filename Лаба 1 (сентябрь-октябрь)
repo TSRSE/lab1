@@ -13,11 +13,36 @@ namespace lab1_sort
         public static bool readfromfile = false;
         public static void SingleLinedArray()
         {
+            string[] LinesToRead;
             string _Number = "";
             List<int> NumbersList = new List<int>();
             string default_path = @"C:\Users\maxim\source\repos\lab1_sort\lab1_sort\bin\Debug\single.txt"; //Прямой путь к файлу, типизация файла: a; b; c;
-            string[] LinesToRead = File.ReadAllLines(default_path);
+            try { 
+                LinesToRead = File.ReadAllLines(default_path);
+            }
+
+            catch
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Ошибка в пути к файлу!\nПо данному пути '{0}'\nне было найдено файла single.txt!", default_path);
+                Console.ResetColor();
+                Console.WriteLine("Нажмите любую клавишу для возвращения в главное меню...");
+                Console.ReadKey();
+                Program.Menu();
+            }
+
+            LinesToRead = File.ReadAllLines(default_path);
             string FullLineOfArray = LinesToRead[0];
+
+            if (!FullLineOfArray.Contains("; "))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Ошибка записи в файле, пожалуйста, проверьте введенные данные...\nПример рного ввода: 3; -1; 0; 80;", default_path);
+                Console.ResetColor();
+                Console.WriteLine("Нажмите любую клавишу для возвращения в главное меню...");
+                Console.ReadKey();
+                Program.Menu();
+            }
 
             for (int i = 0; i < FullLineOfArray.LastIndexOf(';'); i++)
             {
@@ -36,7 +61,7 @@ namespace lab1_sort
                 Console.Clear();
                 NumbersList.Add(Int32.Parse(FullLineOfArray.ToString().Replace(";", "")));
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Got some trubles ehre, but we can handle...");
+                Console.WriteLine("Got some trubles here, but we can handle...");
                 System.Threading.Thread.Sleep(500);
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Green;
@@ -107,6 +132,8 @@ namespace lab1_sort
                 ReadFromFileRaw.readfromfile = true;
             else
                 ReadFromFileRaw.readfromfile = false;
+
+            Console.Clear();
         }
         public static void sortByCode()
         {
