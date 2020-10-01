@@ -459,6 +459,7 @@ namespace lab1_sort
         } //запрос на чтение из файла
         public static void Menu()
         {
+            Console.Title = "Сортировка массивов | Удалых Максим БПИ20-9";
             Int32 Coice = 0, key = 0;
             do
             {
@@ -897,6 +898,7 @@ namespace lab1_sort
         static void sortByCodeStep()
         {
             bool error;
+            int _index = 0;
             int[][] a_sortbysteps;
             int min = 0;
             int max = 0;
@@ -939,7 +941,7 @@ namespace lab1_sort
                 {
                     for (int j = 0; j < a_sortbysteps[i].Length; j++)
                     {
-                        Console.Write("\nМассив {0}, элемент {1}: ", i, j);
+                        Console.Write("\nМассив {0}, элемент {1}: ", i+1, j+1);
 
                         error = int.TryParse(Console.ReadLine(), out a_sortbysteps[i][j]);
                         RightInputCheck(a_sortbysteps[i][j].ToString(), error, 1);
@@ -959,22 +961,51 @@ namespace lab1_sort
             if (answer.ToUpper().Contains("Y"))
             {
                 bool ischanging = true;
+                int number=0;
                 while (ischanging == true)
                 {
                     Console.Clear();
-                    Console.Write("Введите номер массива: ");
-                    error = int.TryParse(Console.ReadLine(), out int number);
-                    RightInputCheck(number.ToString(), error, 1);
-                    number--;
+                    bool accepted = false;
+                    while(accepted == false) { 
+                        Console.Write("Всего массивов: {0}\nВведите номер массива: ", a_sortbysteps.Length);
+                        error = int.TryParse(Console.ReadLine(), out number);
+                        RightInputCheck(number.ToString(), error, 1);
 
-                    foreach (var item in a_sortbysteps[number])
-                    {
-                        Console.Write("{0}\t", item);
+                        if (number > a_sortbysteps.Length || number < 1)
+                        {
+                            accepted = false;
+                            Console.Clear();
+                            Console.WriteLine("Вы не можете ввести число большее кол-ва массивов и меньшее 1");
+                        }
+                        
+                        else
+                            accepted = true;
+                        
+                        number--;
                     }
-
-                    Console.Write("Введите номер элемента: ");
-                    error = int.TryParse(Console.ReadLine(), out int _index);
-                    RightInputCheck(_index.ToString(), error, 1);
+                    accepted = false;
+                    while (accepted == false)
+                    {
+                        foreach (var item in a_sortbysteps[number])
+                        {
+                            Console.Write("{0}\t", item);
+                        }
+                    
+                        Console.Write("\nВведите номер элемента: ");
+                        error = int.TryParse(Console.ReadLine(), out _index);
+                        RightInputCheck(_index.ToString(), error, 1);
+                    
+                        if (_index > a_sortbysteps[number].Length || _index < 1)
+                        {
+                            accepted = false;
+                            Console.Clear();
+                            Console.WriteLine("ВЫ не можете выбрать несуществующий элемент");
+                        }
+                        else
+                        {
+                            accepted = true;
+                        }
+                    }
                     _index--;
 
                     Console.Write("\nЗаменить число {0} на ", a_sortbysteps[number][_index]);
