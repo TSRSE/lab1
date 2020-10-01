@@ -2,9 +2,6 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Runtime.CompilerServices;
 using System.Diagnostics;
 
 namespace lab1_sort
@@ -30,7 +27,8 @@ namespace lab1_sort
             catch
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Ошибка в пути к файлу!\nВ папке не было найдено файла single.txt!");
+                Console.WriteLine("Ошибка в пути к файлу!\nВ папке не было найдено файла single.txt! Создаем его...");
+                File.WriteAllText(@"single.txt", "-2; 0; 2;");
                 Console.ResetColor();
                 Console.WriteLine("Нажмите любую клавишу для возвращения в главное меню...");
                 Console.ReadKey();
@@ -93,7 +91,7 @@ namespace lab1_sort
             string FullLineOfArray = "";
             string _Number = "";
             List<int> NumbersList = new List<int>();
-            int c_lines = 0, maxElemsInLines=0;
+            int c_lines = 0, maxElemsInLines = 0;
 
             string default_path = @"duo.txt"; //Прямой путь к файлу, типизация файла: a; b; c;\na1; a2; a3;
             try
@@ -104,7 +102,8 @@ namespace lab1_sort
             catch
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Ошибка в пути к файлу!\nВ папке не было найдено файла duo.txt!");
+                Console.WriteLine("Ошибка в пути к файлу!\nВ папке не было найдено файла duo.txt! Создаем его...");
+                File.WriteAllText(@"duo.txt","-1; 0; 1;\n-2; -0; 2;");
                 Console.ResetColor();
                 Console.WriteLine("Нажмите любую клавишу для возвращения в главное меню...");
                 Console.ReadKey();
@@ -116,10 +115,10 @@ namespace lab1_sort
             {
                 FullLineOfArray = FullLineOfArray + LinesToRead[i];
             }
-            
+
 
             c_lines = LinesToRead.Length;
-            
+
             //Считать кол-во линий, потом каждую описать как единичный массив
 
             if (!FullLineOfArray.Contains("; "))
@@ -136,19 +135,21 @@ namespace lab1_sort
 
 
             //counter for ASS
-            int linesToListCounter=0;
+            int linesToListCounter = 0;
             for (int i = 0; i < LinesToRead.Length; i++) //На Каждую строку
             {
-                for (int k = 0; k < LinesToRead[i].LastIndexOf(';')+1; k++) // Сколько там этих ваших
-                {
+                while(LinesToRead[i].Length != 0) 
+                { 
                     for (int j = 0; j < LinesToRead[i].IndexOf(';'); j++)
                     {
                         _Number += LinesToRead[i].ElementAt(j);
                         LinesToRead[i].Replace(LinesToRead[i].ElementAt(j).ToString(), "");
                     }
 
-                    NumbersList.Add(int.Parse(_Number));
-
+                    try { 
+                        NumbersList.Add(int.Parse(_Number));
+                    }
+                    catch { }
                     LinesToRead[i] = LinesToRead[i].Remove(0, _Number.Length + 1);
 
                     _Number = "";
@@ -182,8 +183,8 @@ namespace lab1_sort
             linesToListCounter = 0;
             for (int i = 0; i < LinesToRead.Length; i++) //На Каждую строку
             {
-                for (int k = 0; k < LinesToRead[i].LastIndexOf(';')+1; k++) // Сколько там этих ваших
-                {
+                while (LinesToRead[i].Length != 0) 
+                { 
                     for (int j = 0; j < LinesToRead[i].IndexOf(';'); j++)
                     {
                         _Number += LinesToRead[i].ElementAt(j);
@@ -199,12 +200,12 @@ namespace lab1_sort
 
                 if (linesToListCounter <= i)
                 {
-                    
+
                     for (int l = 0; l < maxElemsInLines; l++)
                     {
-                        try 
+                        try
                         {
-                            
+
                             writeDuoArray[linesToListCounter, l] = NumbersList.ElementAt(l);
                         }
                         catch
@@ -213,14 +214,14 @@ namespace lab1_sort
                             {
                                 NumbersList.Add(0);
                             }
-                            writeDuoArray[linesToListCounter, l] = int.Parse(LinesToRead[l].ToString().Replace(";",""));
+                            writeDuoArray[linesToListCounter, l] = 0;
                         }
                     }
                     linesToListCounter++;
                     NumbersList.Clear();
                 }
             }
-            
+
             //counter is ended
 
             try
@@ -263,7 +264,8 @@ namespace lab1_sort
             catch
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Ошибка в пути к файлу!\nВ папке не было найдено файла duo.txt!");
+                Console.WriteLine("Ошибка в пути к файлу!\nВ папке не было найдено файла multy.txt! Создаем его...");
+                File.WriteAllText(@"multy.txt", "1; 2; 3;\n4; 5; 6; 7;");
                 Console.ResetColor();
                 Console.WriteLine("Нажмите любую клавишу для возвращения в главное меню...");
                 Console.ReadKey();
@@ -298,8 +300,7 @@ namespace lab1_sort
             int linesToListCounter = 0;
             for (int i = 0; i < LinesToRead.Length; i++) //На Каждую строку
             {
-                for (int k = 0; k < LinesToRead[i].LastIndexOf(';') + 1; k++) // Сколько там этих ваших
-                {
+                while (LinesToRead[i].Length != 0) { 
                     for (int j = 0; j < LinesToRead[i].IndexOf(';'); j++)
                     {
                         _Number += LinesToRead[i].ElementAt(j);
@@ -341,23 +342,19 @@ namespace lab1_sort
             linesToListCounter = 0;
             for (int i = 0; i < LinesToRead.Length; i++) //На Каждую строку
             {
-                for (int k = 0; k < LinesToRead[i].LastIndexOf(';') + 1; k++) // Сколько там этих ваших
-                {
-                    for (int j = 0; j < LinesToRead[i].IndexOf(';'); j++)
-                    {
-                        
-                        _Number += LinesToRead[i].ElementAt(j);
-                        LinesToRead[i].Replace(LinesToRead[i].ElementAt(j).ToString(), "");
+                    while (LinesToRead[i].Length != 0) { 
+                        for (int j = 0; j < LinesToRead[i].IndexOf(';'); j++) //Символов до ';'
+                        {
+                            _Number += LinesToRead[i].ElementAt(j);
+                            LinesToRead[i].Replace(LinesToRead[i].ElementAt(j).ToString(), "");
+                        }
+
+                        NumbersList.Add(int.Parse(_Number));
+
+                        LinesToRead[i] = LinesToRead[i].Remove(0, _Number.Length + 1);
+
+                        _Number = "";
                     }
-
-                    NumbersList.Add(int.Parse(_Number));
-
-                    LinesToRead[i] = LinesToRead[i].Remove(0, _Number.Length + 1);
-
-
-                    _Number = "";
-
-                }
 
                 if (linesToListCounter <= i)
                 {
@@ -366,23 +363,23 @@ namespace lab1_sort
                     {
                         try
                         {
-                            //int f = maxElemsInLines;
-                            while (NumbersList.Count < maxElemsInLines)
-                            {
-                                NumbersList.Add(0);
-                            }
+                            //while (NumbersList.Count < maxElemsInLines)
+                            //{
+                            //    NumbersList.Add(0);
+                            //}
                             writeStepArray[linesToListCounter] = NumbersList.ToArray();
+                            //writeStepArray[linesToListCounter][l] = int.Parse(LinesToRead[l].ToString().Replace(";", ""));
                         }
                         catch
                         {
-                            writeStepArray[linesToListCounter][l] = int.Parse(LinesToRead[l].ToString().Replace(";",""));
+                            writeStepArray[linesToListCounter][l] = int.Parse(LinesToRead[l].ToString().Replace(";", ""));
                         }
                     }
                     linesToListCounter++;
                     NumbersList.Clear();
                 }
             }
-            
+
             //counter is ended
 
             try
@@ -407,7 +404,7 @@ namespace lab1_sort
                 Console.ResetColor();
                 Console.Clear();
             }
-        }    //Чтение зубчатого массива из файла
+        }   //Чтение зубчатого массива из файла
     }
     class Program
     {
@@ -474,7 +471,7 @@ namespace lab1_sort
                 if (key == 38) Coice--;
                 if (key == 40) Coice++;
                 if (key == 13 || key == 27) break;
-                
+
 
                 if (Coice < 0) Coice = 3;
                 if (Coice > 3) Coice = 0;
@@ -536,7 +533,7 @@ namespace lab1_sort
                 for (int i = 0; i < n; i++)
                 {
                     Console.Clear();
-                    Console.WriteLine("Введите {0} элемент", i+1);
+                    Console.WriteLine("Введите {0} элемент", i + 1);
 
                     error = int.TryParse(Console.ReadLine(), out a_sortByCode[i]);
                     RightInputCheck(a_sortByCode[i].ToString(), error, 2);
@@ -568,8 +565,8 @@ namespace lab1_sort
                 Console.Write("{0}\t", item);
             }
 
-            Console.WriteLine("\n\nСамое большое число\nНомер:{2} \tИндекс:{0}\tЗначение:{1}", inMax, Max, inMax+1);
-            Console.WriteLine("\nСамое маленькое число\nНомер:{2} \tИндекс:{0}\tЗначение:{1}", inMin, Min, inMin+1);
+            Console.WriteLine("\n\nСамое большое число\nНомер:{2} \tИндекс:{0}\tЗначение:{1}", inMax, Max, inMax + 1);
+            Console.WriteLine("\nСамое маленькое число\nНомер:{2} \tИндекс:{0}\tЗначение:{1}", inMin, Min, inMin + 1);
 
             for (int i = 0; i < n; i++)
             {
@@ -665,7 +662,7 @@ namespace lab1_sort
 
             Console.Clear();
             AskForFileInput();
-            
+
 
             if (ReadFromFileRaw.readfromfile == true)
             {
@@ -685,7 +682,7 @@ namespace lab1_sort
                 for (int i = 0; i < n; i++)
                 {
                     Console.Clear();
-                    Console.WriteLine("Введите {0} элемент", i+1);
+                    Console.WriteLine("Введите {0} элемент", i + 1);
                     error = int.TryParse(Console.ReadLine(), out a_sortByCodeArray[i]);
                     RightInputCheck(a_sortByCodeArray[i].ToString(), error, 1);
                 }
@@ -696,8 +693,8 @@ namespace lab1_sort
                 Console.Write("{0}\t", item);
             }
 
-            Console.WriteLine("\n\nМаксимальное значение: \nНомер:{2} \tИндекс:{0}\tЗначение:{1}", Array.IndexOf(a_sortByCodeArray, a_sortByCodeArray.Max()), a_sortByCodeArray.Max(), Array.IndexOf(a_sortByCodeArray, a_sortByCodeArray.Max())+1);
-            Console.WriteLine("\n\nМинимальное значение: \nНомер:{2} \tИндекс:{0}\tЗначение:{1}", Array.IndexOf(a_sortByCodeArray, a_sortByCodeArray.Min()), a_sortByCodeArray.Min(), Array.IndexOf(a_sortByCodeArray, a_sortByCodeArray.Min())+1);
+            Console.WriteLine("\n\nМаксимальное значение: \nНомер:{2} \tИндекс:{0}\tЗначение:{1}", Array.IndexOf(a_sortByCodeArray, a_sortByCodeArray.Max()), a_sortByCodeArray.Max(), Array.IndexOf(a_sortByCodeArray, a_sortByCodeArray.Max()) + 1);
+            Console.WriteLine("\n\nМинимальное значение: \nНомер:{2} \tИндекс:{0}\tЗначение:{1}", Array.IndexOf(a_sortByCodeArray, a_sortByCodeArray.Min()), a_sortByCodeArray.Min(), Array.IndexOf(a_sortByCodeArray, a_sortByCodeArray.Min()) + 1);
 
             Array.Sort(a_sortByCodeArray);
             Console.WriteLine("\n\nСортировка по возрастанию");
@@ -744,7 +741,7 @@ namespace lab1_sort
                 {
                     Console.Write("{0}\t", item);
                 }
-                
+
             }
             Console.WriteLine("\n\nНажмите любую клавишу для возвращения в главное меню");
             Console.ReadKey();
@@ -778,8 +775,8 @@ namespace lab1_sort
                     }
                 }
             }
-            else 
-            { 
+            else
+            {
                 Console.Clear();
                 Console.WriteLine("Параметры для первого массива");
 
@@ -798,7 +795,7 @@ namespace lab1_sort
                     for (int j = 0; j < m; j++)
                     {
                         Console.Clear();
-                        Console.WriteLine("Массив 1\nВведите элемент для {0} строки, {1} столбца", i+1, j+1);
+                        Console.WriteLine("Массив 1\nВведите элемент для {0} строки, {1} столбца", i + 1, j + 1);
 
                         error = int.TryParse(Console.ReadLine(), out a_sortByCodeDouble[i, j]);
                         RightInputCheck(m.ToString(), error, 1);
@@ -831,7 +828,7 @@ namespace lab1_sort
                 for (int j = 0; j < m2; j++)
                 {
                     Console.Clear();
-                    Console.WriteLine("Массив 2\nВведите элемент для {0} строки, {1} столбца", i+1, j+1);
+                    Console.WriteLine("Массив 2\nВведите элемент для {0} строки, {1} столбца", i + 1, j + 1);
                     error = int.TryParse(Console.ReadLine(), out a_sortByCodeDouble2[i, j]);
                     RightInputCheck(m.ToString(), error, 1);
                 }
@@ -867,8 +864,8 @@ namespace lab1_sort
                 }
             }
 
-            Console.WriteLine("\n\nМаксимальное значение: \nНомер: {3};{4} \tИндекс: {0};{1}\tЗначение: {2}", l_maxInd, pillar_maxInd, max, l_maxInd+1, pillar_maxInd+1);
-            Console.WriteLine("\nМинимальное значение:  \nНомер: {3};{4} \tИндекс: {0};{1}\tЗначение: {2}", l_minInd, pillar_minInd, min, l_minInd+1, pillar_minInd+1);
+            Console.WriteLine("\n\nМаксимальное значение: \nНомер: {3};{4} \tИндекс: {0};{1}\tЗначение: {2}", l_maxInd, pillar_maxInd, max, l_maxInd + 1, pillar_maxInd + 1);
+            Console.WriteLine("\nМинимальное значение:  \nНомер: {3};{4} \tИндекс: {0};{1}\tЗначение: {2}", l_minInd, pillar_minInd, min, l_minInd + 1, pillar_minInd + 1);
             int summ_a1 = 0;
             int summ_a2 = 0;
 
@@ -941,7 +938,7 @@ namespace lab1_sort
                 {
                     for (int j = 0; j < a_sortbysteps[i].Length; j++)
                     {
-                        Console.Write("\nМассив {0}, элемент {1}: ", i+1, j+1);
+                        Console.Write("\nМассив {0}, элемент {1}: ", i + 1, j + 1);
 
                         error = int.TryParse(Console.ReadLine(), out a_sortbysteps[i][j]);
                         RightInputCheck(a_sortbysteps[i][j].ToString(), error, 1);
@@ -961,12 +958,13 @@ namespace lab1_sort
             if (answer.ToUpper().Contains("Y"))
             {
                 bool ischanging = true;
-                int number=0;
+                int number = 0;
                 while (ischanging == true)
                 {
                     Console.Clear();
                     bool accepted = false;
-                    while(accepted == false) { 
+                    while (accepted == false)
+                    {
                         Console.Write("Всего массивов: {0}\nВведите номер массива: ", a_sortbysteps.Length);
                         error = int.TryParse(Console.ReadLine(), out number);
                         RightInputCheck(number.ToString(), error, 1);
@@ -977,10 +975,10 @@ namespace lab1_sort
                             Console.Clear();
                             Console.WriteLine("Вы не можете ввести число большее кол-ва массивов и меньшее 1");
                         }
-                        
+
                         else
                             accepted = true;
-                        
+
                         number--;
                     }
                     accepted = false;
@@ -990,16 +988,16 @@ namespace lab1_sort
                         {
                             Console.Write("{0}\t", item);
                         }
-                    
+
                         Console.Write("\nВведите номер элемента: ");
                         error = int.TryParse(Console.ReadLine(), out _index);
                         RightInputCheck(_index.ToString(), error, 1);
-                    
+
                         if (_index > a_sortbysteps[number].Length || _index < 1)
                         {
                             accepted = false;
                             Console.Clear();
-                            Console.WriteLine("ВЫ не можете выбрать несуществующий элемент");
+                            Console.WriteLine("Вы не можете выбрать несуществующий элемент");
                         }
                         else
                         {
@@ -1026,7 +1024,7 @@ namespace lab1_sort
             for (int i = 0; i < a_sortbysteps.Length; i++)
             {
                 Console.Write("\nМассив {0}\n", i);
-                for (int j = 0; j < l; j++)
+                for (int j = 0; j < a_sortbysteps[i].Length; j++)
                 {
                     Console.Write("{0}\t", a_sortbysteps[i][j]);
                     if (min > a_sortbysteps[i][j])
