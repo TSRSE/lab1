@@ -199,11 +199,16 @@ namespace lab1_sort
                     for (int l = 0; l < maxElemsInLines; l++)
                     {
                         try 
-                        { 
+                        {
+                            
                             writeDuoArray[linesToListCounter, l] = NumbersList.ElementAt(l);
                         }
                         catch
                         {
+                            while (NumbersList.Count < maxElemsInLines)
+                            {
+                                NumbersList.Add(0);
+                            }
                             writeDuoArray[linesToListCounter, l] = int.Parse(LinesToRead[l].ToString().Replace(";",""));
                         }
                     }
@@ -238,10 +243,175 @@ namespace lab1_sort
                 System.Threading.Thread.Sleep(1000);
                 Console.ResetColor();
             }
-
-            
-            
         }    //Чтение двумерного массива из файла
+        public static void StepLinedArray()
+        {
+            string[] LinesToRead;
+            string FullLineOfArray = "";
+            string _Number = "";
+            List<int> NumbersList = new List<int>();
+            int c_lines = 0, c_colomns = 0, maxElemsInLines = 0;
+
+            string default_path = @"multy.txt"; //Прямой путь к файлу, типизация файла: a; b; c;\na1; a2; a3;
+            try
+            {
+                LinesToRead = File.ReadAllLines(default_path);
+            }
+
+            catch
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Ошибка в пути к файлу!\nВ папке не было найдено файла duo.txt!");
+                Console.ResetColor();
+                Console.WriteLine("Нажмите любую клавишу для возвращения в главное меню...");
+                Console.ReadKey();
+                Program.Menu();
+            } //Исключение на путь
+
+            LinesToRead = File.ReadAllLines(default_path);
+            for (int i = 0; i < LinesToRead.Length; i++)
+            {
+                FullLineOfArray = FullLineOfArray + LinesToRead[i];
+            }
+
+
+            c_lines = LinesToRead.Length;
+
+            //Считать кол-во линий, потом каждую описать как единичный массив
+
+            if (!FullLineOfArray.Contains("; "))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Ошибка записи в файле, пожалуйста, проверьте введенные данные...\nПример рного ввода: 3; -1; 0; 80;\n5; -11; 103; 11;" +
+                    "\nЗаметьте, что если элементов для ровного массива не будет хватать, пустые места займут нули", default_path);
+                Console.ResetColor();
+                Console.WriteLine("Нажмите любую клавишу для возвращения в главное меню...");
+                Console.ReadKey();
+                Program.Menu();
+            } //Исключение на типизацию
+
+
+
+            //counter for ASS
+            int linesToListCounter = 0;
+            for (int i = 0; i < LinesToRead.Length; i++) //На Каждую строку
+            {
+                for (int k = 0; k < LinesToRead[i].LastIndexOf(';') + 1; k++) // Сколько там этих ваших
+                {
+                    for (int j = 0; j < LinesToRead[i].IndexOf(';'); j++)
+                    {
+                        _Number += LinesToRead[i].ElementAt(j);
+                        LinesToRead[i].Replace(LinesToRead[i].ElementAt(j).ToString(), "");
+                    }
+
+                    NumbersList.Add(int.Parse(_Number));
+
+                    LinesToRead[i] = LinesToRead[i].Remove(0, _Number.Length + 1);
+
+                    _Number = "";
+                }
+
+                if (linesToListCounter < i)
+                {
+                    linesToListCounter++;
+                    NumbersList.Clear();
+                }
+
+                if (maxElemsInLines < NumbersList.Count)
+                {
+                    maxElemsInLines = NumbersList.Count;
+                }
+            }
+
+            //counter is ended
+
+
+            FullLineOfArray = "";
+            LinesToRead = File.ReadAllLines(default_path);
+            for (int i = 0; i < LinesToRead.Length; i++)
+            {
+                FullLineOfArray = FullLineOfArray + LinesToRead[i];
+            }
+            writeStepArray = new int[LinesToRead.Length][];
+
+
+            //Writer
+            linesToListCounter = 0;
+            for (int i = 0; i < LinesToRead.Length; i++) //На Каждую строку
+            {
+                for (int k = 0; k < LinesToRead[i].LastIndexOf(';') + 1; k++) // Сколько там этих ваших
+                {
+                    for (int j = 0; j < LinesToRead[i].IndexOf(';'); j++)
+                    {
+                        
+                        _Number += LinesToRead[i].ElementAt(j);
+                        LinesToRead[i].Replace(LinesToRead[i].ElementAt(j).ToString(), "");
+                    }
+
+                    NumbersList.Add(int.Parse(_Number));
+
+                    LinesToRead[i] = LinesToRead[i].Remove(0, _Number.Length + 1);
+
+
+                    _Number = "";
+
+                }
+
+                if (linesToListCounter <= i)
+                {
+
+                    for (int l = 0; l < maxElemsInLines; l++)
+                    {
+                        try
+                        {
+                            //int f = maxElemsInLines;
+                            while (NumbersList.Count < maxElemsInLines)
+                            {
+                                NumbersList.Add(0);
+                            }
+                            writeStepArray[linesToListCounter] = NumbersList.ToArray();
+                        }
+                        catch
+                        {
+                            writeStepArray[linesToListCounter][l] = int.Parse(LinesToRead[l].ToString().Replace(";",""));
+                        }
+                    }
+                    linesToListCounter++;
+                    NumbersList.Clear();
+                }
+            }
+            for (int i = 0; i < writeStepArray.GetLength(0); i++)
+            {
+                for (int j = 0; j < maxElemsInLines; j++)
+                {
+                    Console.Write("{0}\t", writeStepArray[i][j]);
+                }
+                Console.WriteLine();
+            }
+            Console.ReadKey();
+            //counter is ended
+
+            try
+            {
+                Console.Clear();
+                NumbersList.Add(int.Parse(FullLineOfArray.ToString().Replace(";", "")));
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Got some trubles here, but we can handle...");
+                System.Threading.Thread.Sleep(500);
+                Console.Clear();
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("Done Sucsessfully!");
+                System.Threading.Thread.Sleep(1000);
+                Console.ResetColor();
+            }
+            catch
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("Done Sucsessfully!");
+                System.Threading.Thread.Sleep(1000);
+                Console.ResetColor();
+            }
+        }    //Чтение зубчатого массива из файла
     }
     class Program
     {
@@ -722,38 +892,52 @@ namespace lab1_sort
             int[][] a_sortbysteps;
             int min = 0;
             int max = 0;
-            int l = 0;
+            int l = 0, n = 0;
 
-            Console.Clear();
-            Console.WriteLine("Выберите количество массивов для массива");
+            AskForFileInput();
 
-            error = int.TryParse(Console.ReadLine(), out int n);
-            RightInputCheck(n.ToString(), error, 2);
-
-            a_sortbysteps = new int[n][];
-
-            for (int i = 0; i < n; i++)
+            if (ReadFromFileRaw.readfromfile == true)
+            {
+                ReadFromFileRaw.StepLinedArray();
+                a_sortbysteps = ReadFromFileRaw.writeStepArray;
+                max = a_sortbysteps[0][0];
+                min = a_sortbysteps[0][0];
+                n = a_sortbysteps.GetLength(0);
+                l = ReadFromFileRaw.writeStepArray[0].Length;
+            }
+            else
             {
                 Console.Clear();
-                Console.WriteLine("Выберите кол-во элементов для массива {0}", i);
+                Console.WriteLine("Выберите количество массивов для массива");
 
-                error = int.TryParse(Console.ReadLine(), out l);
-                RightInputCheck(l.ToString(), error, 2);
+                error = int.TryParse(Console.ReadLine(), out n);
+                RightInputCheck(n.ToString(), error, 2);
 
-                a_sortbysteps[i] = new int[l];
-            }
+                a_sortbysteps = new int[n][];
 
-            for (int i = 0; i < l; i++)
-            {
-                for (int j = 0; j < a_sortbysteps[i].Length; j++)
+                for (int i = 0; i < n; i++)
                 {
-                    Console.Write("\nМассив {0}, элемент {1}: ", i, j);
+                    Console.Clear();
+                    Console.WriteLine("Выберите кол-во элементов для массива {0}", i);
 
-                    error = int.TryParse(Console.ReadLine(), out a_sortbysteps[i][j]);
-                    RightInputCheck(a_sortbysteps[i][j].ToString(), error, 1);
+                    error = int.TryParse(Console.ReadLine(), out l);
+                    RightInputCheck(l.ToString(), error, 2);
 
-                    max = a_sortbysteps[i][j];
-                    min = a_sortbysteps[i][j];
+                    a_sortbysteps[i] = new int[l];
+                }
+
+                for (int i = 0; i < l; i++)
+                {
+                    for (int j = 0; j < a_sortbysteps[i].Length; j++)
+                    {
+                        Console.Write("\nМассив {0}, элемент {1}: ", i, j);
+
+                        error = int.TryParse(Console.ReadLine(), out a_sortbysteps[i][j]);
+                        RightInputCheck(a_sortbysteps[i][j].ToString(), error, 1);
+
+                        max = a_sortbysteps[i][j];
+                        min = a_sortbysteps[i][j];
+                    }
                 }
             }
             Console.Clear();
@@ -799,10 +983,10 @@ namespace lab1_sort
             }
 
             Console.WriteLine("Вывожу массив...");
-            for (int i = 0; i < l; i++)
+            for (int i = 0; i < a_sortbysteps.Length; i++)
             {
                 Console.Write("\nМассив {0}\n", i);
-                for (int j = 0; j < a_sortbysteps.Length; j++)
+                for (int j = 0; j < l; j++)
                 {
                     Console.Write("{0}\t", a_sortbysteps[i][j]);
                     if (min > a_sortbysteps[i][j])
