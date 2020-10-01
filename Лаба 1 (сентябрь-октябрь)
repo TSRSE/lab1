@@ -528,21 +528,27 @@ namespace lab1_sort
             {
                 Console.WriteLine("Введите нужное количество элементов в массиве");
 
-                int _number = int.Parse(Console.ReadLine());
-                string _str = Console.ReadLine();
-
                 error = int.TryParse(Console.ReadLine(), out n);
                 RightInputCheck(n.ToString(), error, 2);
 
                 a_sortByCode = new int[n];
 
+                //try-catch только хуже
                 for (int i = 0; i < n; i++)
                 {
-                    Console.Clear();
-                    Console.WriteLine("Введите {0} элемент", i + 1);
+                    while (true) { 
+                        Console.Clear();
+                        Console.WriteLine("Введите {0} элемент", i + 1);
 
-                    error = int.TryParse(Console.ReadLine(), out a_sortByCode[i]);
-                    RightInputCheck(a_sortByCode[i].ToString(), error, 2);
+                        error = int.TryParse(Console.ReadLine(), out a_sortByCode[i]);
+                        if (error == false)
+                        {
+                            Console.WriteLine("Произошла ошибка, повторите ввод...");
+                            System.Threading.Thread.Sleep(500);
+                        }
+                        else
+                            break;
+                    }
                 }
             }
 
@@ -557,7 +563,7 @@ namespace lab1_sort
                     inMax = i;
                 }
 
-                if (inMin > a_sortByCode[i])
+                if (Min >= a_sortByCode[i])
                 {
                     Min = a_sortByCode[i];
                     inMin = i;
@@ -685,12 +691,21 @@ namespace lab1_sort
 
                 a_sortByCodeArray = new int[n];
 
+
                 for (int i = 0; i < n; i++)
                 {
-                    Console.Clear();
-                    Console.WriteLine("Введите {0} элемент", i + 1);
-                    error = int.TryParse(Console.ReadLine(), out a_sortByCodeArray[i]);
-                    RightInputCheck(a_sortByCodeArray[i].ToString(), error, 1);
+                    while (true) { 
+                        Console.Clear();
+                        Console.WriteLine("Введите {0} элемент", i + 1);
+                        error = int.TryParse(Console.ReadLine(), out a_sortByCodeArray[i]);
+                        if (error == false)
+                        {
+                            Console.WriteLine("Произошла ошибка, повторите ввод...");
+                            System.Threading.Thread.Sleep(500);
+                        }
+                        else
+                            break;
+                    }
                 }
             }
             //output
@@ -802,22 +817,33 @@ namespace lab1_sort
                 {
                     for (int j = 0; j < m; j++)
                     {
-                        Console.Clear();
-                        Console.WriteLine("Массив 1\nВведите элемент для {0} строки, {1} столбца", i + 1, j + 1);
+                        while (true) { 
+                            Console.Clear();
+                            Console.WriteLine("Массив 1\nВведите элемент для {0} строки, {1} столбца", i + 1, j + 1);
 
-                        error = int.TryParse(Console.ReadLine(), out a_sortByCodeDouble[i, j]);
-                        RightInputCheck(m.ToString(), error, 1);
-
-                        max = a_sortByCodeDouble[i, j];
-                        min = a_sortByCodeDouble[i, j];
-                        pillar_maxInd = j; pillar_minInd = j;
-                        l_maxInd = i; l_minInd = i;
+                            error = int.TryParse(Console.ReadLine(), out a_sortByCodeDouble[i, j]);
+                            if (error == false)
+                            {
+                                Console.WriteLine("Произошла ошибка, повторите ввод...");
+                                System.Threading.Thread.Sleep(500);
+                            }
+                            else 
+                            { 
+                                max = a_sortByCodeDouble[i, j];
+                                min = a_sortByCodeDouble[i, j];
+                                pillar_maxInd = j; pillar_minInd = j;
+                                l_maxInd = i; l_minInd = i;
+                                break;
+                            }
+                        }
                     }
                 }
                 Console.Clear();
             }
 
             //InputSecondArray
+
+            Console.Clear();
             Console.WriteLine("Параметры для второго массива");
 
             Console.WriteLine("Введите нужное количество строк в массиве");
@@ -828,7 +854,6 @@ namespace lab1_sort
             error = int.TryParse(Console.ReadLine(), out int m2);
             RightInputCheck(m2.ToString(), error, 2);
 
-
             int[,] a_sortByCodeDouble2 = new int[n2, m2];
 
             Console.Clear();
@@ -836,10 +861,21 @@ namespace lab1_sort
             {
                 for (int j = 0; j < m2; j++)
                 {
-                    Console.Clear();
-                    Console.WriteLine("Массив 2\nВведите элемент для {0} строки, {1} столбца", i + 1, j + 1);
-                    error = int.TryParse(Console.ReadLine(), out a_sortByCodeDouble2[i, j]);
-                    RightInputCheck(m.ToString(), error, 1);
+                    while (true)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Массив 2\nВведите элемент для {0} строки, {1} столбца", i + 1, j + 1);
+
+                        error = int.TryParse(Console.ReadLine(), out a_sortByCodeDouble2[i, j]);
+                        if (error == false)
+                        {
+                            Console.WriteLine("Произошла ошибка, повторите ввод...");
+                            System.Threading.Thread.Sleep(500);
+                        }
+                        else
+                            break;
+
+                    }
                 }
             }
             Console.Clear();
@@ -901,7 +937,7 @@ namespace lab1_sort
             Console.WriteLine("\n\nНажмите любую клавишу для возвращения в главное меню");
             Console.ReadKey();
             Menu();
-        } //Сортировка двумерного массива
+        } //Сортировка двумерного массива 
         static void sortByCodeStep()
         {
             bool error;
@@ -935,13 +971,24 @@ namespace lab1_sort
 
                 for (int i = 0; i < n; i++)
                 {
-                    Console.Clear();
-                    Console.WriteLine("Выберите кол-во элементов для массива {0}", i);
+                    while (true)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Выберите кол-во элементов для массива {0}", i);
 
-                    error = int.TryParse(Console.ReadLine(), out l);
-                    RightInputCheck(l.ToString(), error, 2);
-
-                    a_sortbysteps[i] = new int[l];
+                        error = int.TryParse(Console.ReadLine(), out l);
+                        if (error == false)
+                        {
+                            Console.WriteLine("Произошла ошибка, повторите ввод...");
+                            System.Threading.Thread.Sleep(500);
+                        }
+                        else
+                        {
+                            a_sortbysteps[i] = new int[l];
+                            break;
+                        }
+                        
+                    }
                 }
 
                 for (int i = 0; i < l; i++)
@@ -951,10 +998,17 @@ namespace lab1_sort
                         Console.Write("\nМассив {0}, элемент {1}: ", i + 1, j + 1);
 
                         error = int.TryParse(Console.ReadLine(), out a_sortbysteps[i][j]);
-                        RightInputCheck(a_sortbysteps[i][j].ToString(), error, 1);
-
-                        max = a_sortbysteps[i][j];
-                        min = a_sortbysteps[i][j];
+                        if (error == false)
+                        {
+                            Console.WriteLine("Произошла ошибка, повторите ввод...");
+                            System.Threading.Thread.Sleep(500);
+                        }
+                        else
+                        {
+                            max = a_sortbysteps[i][j];
+                            min = a_sortbysteps[i][j];
+                            break;
+                        }
                     }
                 }
             }
@@ -971,13 +1025,22 @@ namespace lab1_sort
                     int number = 0;
                     while (ischanging == true)
                     {
-                        Console.Clear();
+                        
                         bool accepted = false;
                         while (accepted == false)
                         {
-                            Console.Write("Всего массивов: {0}\nВведите номер массива: ", a_sortbysteps.Length);
-                            error = int.TryParse(Console.ReadLine(), out number);
-                            RightInputCheck(number.ToString(), error, 1);
+                            Console.Clear();
+                            while (true) { 
+                                Console.Write("Всего массивов: {0}\nВведите номер массива: ", a_sortbysteps.Length);
+                                error = int.TryParse(Console.ReadLine(), out number);
+                                if (error == false)
+                                {
+                                    Console.WriteLine("Произошла ошибка, повторите ввод...");
+                                    System.Threading.Thread.Sleep(500);
+                                }
+                                else
+                                    break;
+                            }
 
                             if (number > a_sortbysteps.Length || number < 1)
                             {
@@ -992,6 +1055,7 @@ namespace lab1_sort
                             number--;
                         }
                         accepted = false;
+
                         while (accepted == false)
                         {
                             foreach (var item in a_sortbysteps[number])
@@ -999,9 +1063,14 @@ namespace lab1_sort
                                 Console.Write("{0}\t", item);
                             }
 
+
                             Console.Write("\nВведите номер элемента: ");
                             error = int.TryParse(Console.ReadLine(), out _index);
-                            RightInputCheck(_index.ToString(), error, 1);
+                            if (error == false)
+                            {
+                                Console.WriteLine("Произошла ошибка, повторите ввод...");
+                                System.Threading.Thread.Sleep(500);
+                            }
 
                             if (_index > a_sortbysteps[number].Length || _index < 1)
                             {
@@ -1012,6 +1081,7 @@ namespace lab1_sort
                             else
                             {
                                 accepted = true;
+                                break;
                             }
                         }
                         _index--;
