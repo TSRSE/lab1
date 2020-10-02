@@ -9,10 +9,11 @@ namespace lab1_sort
     class ReadFromFileRaw
     {
         public static int[] writeSingleArray;
-        public static int[,] writeDuoArray;
+        public static int[,] writeDuoArray1;
+        public static int[,] writeDuoArray2;
         public static int[][] writeStepArray;
-
         public static bool readfromfile = false;
+
         public static void SingleLinedArray()
         {
             string[] LinesToRead;
@@ -89,31 +90,51 @@ namespace lab1_sort
             //SetFileArrayForFunction
             writeSingleArray = NumbersList.ToArray();
         } //Чтение одномерного массива из файла
-        public static void DuoLinedArray()
+        public static void DuoLinedArray(int InCaseOfArray)
         {
             string[] LinesToRead;
             string FullLineOfArray = "";
             string _Number = "";
+            string default_path = "";
             List<int> NumbersList = new List<int>();
             int maxElemsInLines = 0;
+            if(InCaseOfArray == 1) { 
+                default_path = @"duo_first.txt"; //Прямой путь к файлу, типизация файла: a; b; c;\na1; a2; a3;
+                try
+                {
+                    LinesToRead = File.ReadAllLines(default_path);
+                }
 
-            string default_path = @"duo.txt"; //Прямой путь к файлу, типизация файла: a; b; c;\na1; a2; a3;
-            try
-            {
-                LinesToRead = File.ReadAllLines(default_path);
+                catch
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Ошибка в пути к файлу!\nВ папке не было найдено файла duo_first.txt! Создаем его...");
+                    File.WriteAllText(@"duo_first.txt", "-1; 0; 1;\n-2; -0; 2;");
+                    Console.ResetColor();
+                    Console.WriteLine("Нажмите любую клавишу для возвращения в главное меню...");
+                    Console.ReadKey();
+                    Program.Menu();
+                } //Исключение на путь
             }
-
-            catch
+            else
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Ошибка в пути к файлу!\nВ папке не было найдено файла duo.txt! Создаем его...");
-                File.WriteAllText(@"duo.txt","-1; 0; 1;\n-2; -0; 2;");
-                Console.ResetColor();
-                Console.WriteLine("Нажмите любую клавишу для возвращения в главное меню...");
-                Console.ReadKey();
-                Program.Menu();
-            } //Исключение на путь
+                default_path = @"duo_second.txt"; //Прямой путь к файлу, типизация файла: a; b; c;\na1; a2; a3;
+                try
+                {
+                    LinesToRead = File.ReadAllLines(default_path);
+                }
 
+                catch
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Ошибка в пути к файлу!\nВ папке не было найдено файла duo_second.txt! Создаем его...");
+                    File.WriteAllText(@"duo_second.txt", "1; 0; -1;\n2; -0; -2;");
+                    Console.ResetColor();
+                    Console.WriteLine("Нажмите любую клавишу для возвращения в главное меню...");
+                    Console.ReadKey();
+                    Program.Menu();
+                } //Исключение на путь
+            }
             LinesToRead = File.ReadAllLines(default_path);
             for (int i = 0; i < LinesToRead.Length; i++)
             {
@@ -176,8 +197,10 @@ namespace lab1_sort
             {
                 FullLineOfArray = FullLineOfArray + LinesToRead[i];
             }
-
-            writeDuoArray = new int[LinesToRead.Length, maxElemsInLines];
+            if (InCaseOfArray == 1)
+                writeDuoArray1 = new int[LinesToRead.Length, maxElemsInLines];
+            else if (InCaseOfArray == 2)
+                writeDuoArray2 = new int[LinesToRead.Length, maxElemsInLines];
 
             //SetArray
             linesToListCounter = 0;
@@ -205,7 +228,10 @@ namespace lab1_sort
                     {
                         try
                         {
-                            writeDuoArray[linesToListCounter, l] = NumbersList.ElementAt(l);
+                            if(InCaseOfArray == 1)
+                                writeDuoArray1[linesToListCounter, l] = NumbersList.ElementAt(l);
+                            else if (InCaseOfArray == 2)
+                                writeDuoArray2[linesToListCounter, l] = NumbersList.ElementAt(l);
                         }
                         catch
                         {
@@ -213,7 +239,10 @@ namespace lab1_sort
                             {
                                 NumbersList.Add(0);
                             }
-                            writeDuoArray[linesToListCounter, l] = 0;
+                            if(InCaseOfArray == 1)
+                                writeDuoArray1[linesToListCounter, l] = 0;
+                            else if (InCaseOfArray == 2)
+                                writeDuoArray2[linesToListCounter, l] = 0;
                         }
                     }
                     linesToListCounter++;
@@ -245,7 +274,7 @@ namespace lab1_sort
                 Console.ResetColor();
                 Console.Clear();
             }
-        }    //Чтение двумерного массива из файла
+        } //Чтение двумерного массива из файла 1ый или 2ой
         public static void StepLinedArray()
         {
             string[] LinesToRead;
@@ -403,44 +432,12 @@ namespace lab1_sort
     class Program
     {
         #region ничего
-        static void RightInputCheck(string IsNumber, bool result, int InCase)
-        {
-
-            switch (InCase)
-            {
-                case 1:
-                    if (result == false)
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Были введены неверные данные, пожалуйста, повторите попытку ввода заново.");
-                        Console.ResetColor();
-                        Console.Write("\n\nНажмите любую клавишу, чтобы продолжить...");
-                        Console.ReadKey();
-                        Menu();
-                    }
-                    break;
-
-                case 2:
-                    result = int.TryParse(IsNumber, out int itself);
-                    if (itself <= 0)
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Размер массива не может быть меньше или равен 0, и иметь буквенное значение");
-                        Console.ResetColor();
-                        Console.Write("\n\nНажмите любую клавишу, чтобы продолжить...");
-                        Console.ReadKey();
-                        Menu();
-                    }
-                    break;
-            };
-
-        } //Обработчик ошибок | InCase: 1- проверка на циферки, 2-Кол-во элементов в массиве
-        static void AskForFileInput()
+        static void AskForFileInput(string addString)
         {
             while (true)
             {
                 Console.Clear();
-                Console.Write("Вы хотите ввести данные из файла?[Y/n] ");
+                Console.Write("Вы хотите ввести данные {0}из файла?[Y/n] ",addString);
             
                 string Answer = Console.ReadLine();
 
@@ -517,7 +514,7 @@ namespace lab1_sort
             int n = 0;
             Console.Clear();
 
-            AskForFileInput();
+            AskForFileInput("");
             if (ReadFromFileRaw.readfromfile == true)
             {
                 ReadFromFileRaw.SingleLinedArray();
@@ -526,10 +523,24 @@ namespace lab1_sort
             }
             else
             {
-                Console.WriteLine("Введите нужное количество элементов в массиве");
+                while (true) { 
+                    
+                    Console.Clear();
 
-                error = int.TryParse(Console.ReadLine(), out n);
-                RightInputCheck(n.ToString(), error, 2);
+                    Console.WriteLine("Введите нужное количество элементов в массиве");
+
+                    error = int.TryParse(Console.ReadLine(), out n);
+                    if (error == false || n < 1)
+                    {
+                        Console.WriteLine("Произошла ошибка, повторите ввод..." +
+                            "\nВозможные причины: количества элементов меньше 1 или вы ввели не целочисленное значение");
+                        System.Threading.Thread.Sleep(1000);
+                        Console.WriteLine("\nНажмите любую кнопку для продолжения...");
+                        Console.ReadKey();
+                    }
+                    else
+                        break;
+                }
 
                 a_sortByCode = new int[n];
 
@@ -662,6 +673,7 @@ namespace lab1_sort
                 }
 
             }
+            System.Threading.Thread.Sleep(2000);
             Console.WriteLine("\n\nНажмите любую клавишу для возвращения в главное меню");
             Console.ReadKey();
             Menu();
@@ -673,7 +685,7 @@ namespace lab1_sort
             int[] a_sortByCodeArray;
 
             Console.Clear();
-            AskForFileInput();
+            AskForFileInput("для первого массива");
 
             //InputChoice
             if (ReadFromFileRaw.readfromfile == true)
@@ -684,10 +696,25 @@ namespace lab1_sort
             }
             else
             {
-                Console.WriteLine("Введите нужное количество элементов в массиве");
+                while (true)
+                {
 
-                error = int.TryParse(Console.ReadLine(), out n);
-                RightInputCheck(n.ToString(), error, 2);
+                    Console.Clear();
+
+                    Console.WriteLine("Введите нужное количество элементов в массиве");
+
+                    error = int.TryParse(Console.ReadLine(), out n);
+                    if (error == false || n < 1)
+                    {
+                        Console.WriteLine("Произошла ошибка, повторите ввод..." +
+                            "\nВозможные причины: количества элементов меньше 1 или вы ввели не целочисленное значение");
+                        System.Threading.Thread.Sleep(1000);
+                        Console.WriteLine("\nНажмите любую кнопку для продолжения...");
+                        Console.ReadKey();
+                    }
+                    else
+                        break;
+                }
 
                 a_sortByCodeArray = new int[n];
 
@@ -709,6 +736,7 @@ namespace lab1_sort
                 }
             }
             //output
+            Console.Clear();
             Console.WriteLine("Вывожу массив");
             foreach (var item in a_sortByCodeArray)
             {
@@ -765,28 +793,31 @@ namespace lab1_sort
                 }
 
             }
+            System.Threading.Thread.Sleep(2000);
             Console.WriteLine("\n\nНажмите любую клавишу для возвращения в главное меню");
             Console.ReadKey();
             Menu();
         } //Сортировка одномерного массива с использованием методов сортировки Sys.Array
         static void sortByCodeDouble()
         {
-            int n = 0, m = 0;
+            int n = 0, m = 0, n2 = 0, m2 = 0;
             bool error;
             int[,] a_sortByCodeDouble;
+            int[,] a_sortByCodeDouble2;
             int max = 0, min = 0;
             int pillar_maxInd = 0, pillar_minInd = 0, l_maxInd = 0, l_minInd = 0;
 
             Console.Clear();
-            AskForFileInput();
+            AskForFileInput("для первого массива");
 
+            #region first
             //InputCoice
             if (ReadFromFileRaw.readfromfile == true)
             {
-                ReadFromFileRaw.DuoLinedArray();
-                a_sortByCodeDouble = ReadFromFileRaw.writeDuoArray;
-                n = ReadFromFileRaw.writeDuoArray.GetLength(0);
-                m = ReadFromFileRaw.writeDuoArray.GetLength(1);
+                ReadFromFileRaw.DuoLinedArray(1);
+                a_sortByCodeDouble = ReadFromFileRaw.writeDuoArray1;
+                n = ReadFromFileRaw.writeDuoArray1.GetLength(0);
+                m = ReadFromFileRaw.writeDuoArray1.GetLength(1);
                 for (int i = 0; i < n; i++)
                 {
                     for (int j = 0; j < m; j++)
@@ -800,19 +831,42 @@ namespace lab1_sort
             }
             else
             {
-                Console.Clear();
-                Console.WriteLine("Параметры для первого массива");
-
-                Console.WriteLine("Введите нужное количество строк в массиве");
-                error = int.TryParse(Console.ReadLine(), out n);
-                RightInputCheck(n.ToString(), error, 2);
-
-                Console.WriteLine("Введите нужное количество столбцов в массиве");
-                error = int.TryParse(Console.ReadLine(), out m);
-                RightInputCheck(m.ToString(), error, 2);
+                while (true) {
+                    Console.Clear();
+                    Console.WriteLine("Параметры для первого массива");
+                    Console.WriteLine("Введите нужное количество строк в массиве 1");
+                    error = int.TryParse(Console.ReadLine(), out n);
+                    if (error == false || n < 1)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Произошла ошибка, повторите ввод..." +
+                            "\nВозможные причины: количества элементов меньше 1 или вы ввели не целочисленное значение");
+                        System.Threading.Thread.Sleep(1000);
+                        Console.WriteLine("\nНажмите любую кнопку для продолжения...");
+                        Console.ReadKey();
+                    }
+                    else
+                        break;
+                }
+                while (true)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Введите нужное количество столбцов в массиве 1");
+                    error = int.TryParse(Console.ReadLine(), out m);
+                    if (error == false || n < 1)
+                    {
+                        Console.WriteLine("Произошла ошибка, повторите ввод..." +
+                            "\nВозможные причины: количества элементов меньше 1 или вы ввели не целочисленное значение");
+                        System.Threading.Thread.Sleep(1000);
+                        Console.WriteLine("\nНажмите любую кнопку для продолжения...");
+                        Console.ReadKey();
+                    }
+                    else
+                        break;
+                }
 
                 a_sortByCodeDouble = new int[n, m];
-                
+
                 for (int i = 0; i < n; i++)
                 {
                     for (int j = 0; j < m; j++)
@@ -840,46 +894,82 @@ namespace lab1_sort
                 }
                 Console.Clear();
             }
+            #endregion
 
+            #region second
             //InputSecondArray
-
-            Console.Clear();
-            Console.WriteLine("Параметры для второго массива");
-
-            Console.WriteLine("Введите нужное количество строк в массиве");
-            error = int.TryParse(Console.ReadLine(), out int n2);
-            RightInputCheck(n2.ToString(), error, 2);
-
-            Console.WriteLine("Введите нужное количество столбцов в массиве");
-            error = int.TryParse(Console.ReadLine(), out int m2);
-            RightInputCheck(m2.ToString(), error, 2);
-
-            int[,] a_sortByCodeDouble2 = new int[n2, m2];
-
-            Console.Clear();
-            for (int i = 0; i < n2; i++)
+            AskForFileInput("для второго массива");
+            if (ReadFromFileRaw.readfromfile == true)
             {
-                for (int j = 0; j < m2; j++)
+                ReadFromFileRaw.DuoLinedArray(2);
+                a_sortByCodeDouble2 = ReadFromFileRaw.writeDuoArray2;
+                n2 = ReadFromFileRaw.writeDuoArray2.GetLength(0);
+                m2 = ReadFromFileRaw.writeDuoArray2.GetLength(1);
+            }
+            else 
+            { 
+                while (true)
                 {
-                    while (true)
+                    Console.Clear();
+                    Console.WriteLine("Параметры для второго массива");
+
+                    Console.WriteLine("Введите нужное количество строк в массиве 2");
+                    error = int.TryParse(Console.ReadLine(), out n2);
+                    if (error == false || n < 1)
                     {
                         Console.Clear();
-                        Console.WriteLine("Массив 2\nВведите элемент для {0} строки, {1} столбца", i + 1, j + 1);
+                        Console.WriteLine("Произошла ошибка, повторите ввод..." +
+                            "\nВозможные причины: количества элементов меньше 1 или вы ввели не целочисленное значение");
+                        System.Threading.Thread.Sleep(1000);
+                        Console.WriteLine("\nНажмите любую кнопку для продолжения...");
+                        Console.ReadKey();
+                    }
+                    else
+                        break;
+                }
+                while (true)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Введите нужное количество столбцов в массиве 2");
+                    error = int.TryParse(Console.ReadLine(), out m2);
+                    if (error == false || n < 1)
+                    {
+                        Console.WriteLine("Произошла ошибка, повторите ввод..." +
+                            "\nВозможные причины: количества элементов меньше 1 или вы ввели не целочисленное значение");
+                        System.Threading.Thread.Sleep(1000);
+                        Console.WriteLine("\nНажмите любую кнопку для продолжения...");
+                        Console.ReadKey();
+                    }
+                    else
+                        break;
+                }
+            
+                a_sortByCodeDouble2 = new int[n2, m2];
+                #endregion
 
-                        error = int.TryParse(Console.ReadLine(), out a_sortByCodeDouble2[i, j]);
-                        if (error == false)
+                Console.Clear();
+                for (int i = 0; i < n2; i++)
+                {
+                    for (int j = 0; j < m2; j++)
+                    {
+                        while (true)
                         {
-                            Console.WriteLine("Произошла ошибка, повторите ввод...");
-                            System.Threading.Thread.Sleep(500);
-                        }
-                        else
-                            break;
+                            Console.Clear();
+                            Console.WriteLine("Массив 2\nВведите элемент для {0} строки, {1} столбца", i + 1, j + 1);
 
+                            error = int.TryParse(Console.ReadLine(), out a_sortByCodeDouble2[i, j]);
+                            if (error == false)
+                            {
+                                Console.WriteLine("Произошла ошибка, повторите ввод...");
+                                System.Threading.Thread.Sleep(500);
+                            }
+                            else
+                                break;
+                        }
                     }
                 }
+                Console.Clear();
             }
-            Console.Clear();
-
             //Output
             Console.WriteLine("Вывожу массив 1:");
             for (int i = 0; i < n; i++)
@@ -888,6 +978,17 @@ namespace lab1_sort
                 for (int j = 0; j < m; j++)
                 {
                     Console.Write("{0}\t", a_sortByCodeDouble[i, j]);
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("\nВывожу массив 2:");
+            for (int i = 0; i < n2; i++)
+            {
+                Console.WriteLine();
+                for (int j = 0; j < m2; j++)
+                {
+                    Console.Write("{0}\t", a_sortByCodeDouble2[i, j]);
                 }
             }
 
@@ -912,28 +1013,32 @@ namespace lab1_sort
 
             Console.WriteLine("\n\nМаксимальное значение: \nНомер: {3};{4} \tИндекс: {0};{1}\tЗначение: {2}", l_maxInd, pillar_maxInd, max, l_maxInd + 1, pillar_maxInd + 1);
             Console.WriteLine("\nМинимальное значение:  \nНомер: {3};{4} \tИндекс: {0};{1}\tЗначение: {2}", l_minInd, pillar_minInd, min, l_minInd + 1, pillar_minInd + 1);
-            int summ_a1 = 0;
-            int summ_a2 = 0;
+            int summ_a1 = 0, summ_a2 = 0;
+            int mult_a = 0;
 
-            for (int i = 0; i < n; i++)
+            foreach (int el in a_sortByCodeDouble)
             {
-                for (int j = 0; j < m; j++)
-                {
-                    summ_a1 += a_sortByCodeDouble[i, j];
-                }
+                summ_a1 += el;
+                mult_a *= el;
+            }
+            foreach (int el in a_sortByCodeDouble2)
+            {
+                summ_a2 += el;
+                mult_a *= el;
             }
 
-            for (int i = 0; i < n2; i++)
+            for (int i = 0; i < a_sortByCodeDouble.GetLength(0); i++)
             {
-                for (int j = 0; j < m2; j++)
+                for (int j = 0; j < a_sortByCodeDouble.GetLength(1); j++)
                 {
-                    summ_a2 += a_sortByCodeDouble2[i, j];
+
                 }
             }
 
             Console.WriteLine("\nПроизведение двух массивов: {0}\nРазность двух массивов: {1}\nСумма двух массивов: {2}",
                 summ_a1 * summ_a2, summ_a1 - summ_a2, summ_a1 + summ_a2);
 
+            System.Threading.Thread.Sleep(2000);
             Console.WriteLine("\n\nНажмите любую клавишу для возвращения в главное меню");
             Console.ReadKey();
             Menu();
@@ -948,7 +1053,7 @@ namespace lab1_sort
             int l = 0, n = 0;
 
             Console.Clear();
-            AskForFileInput();
+            AskForFileInput("");
             //InputChoice
             if (ReadFromFileRaw.readfromfile == true)
             {
@@ -961,12 +1066,23 @@ namespace lab1_sort
             }
             else
             {
-                Console.Clear();
-                Console.WriteLine("Выберите количество массивов для массива");
+                while (true) { 
+                    Console.Clear();
+                    Console.WriteLine("Выберите количество массивов для массива");
 
-                error = int.TryParse(Console.ReadLine(), out n);
-                RightInputCheck(n.ToString(), error, 2);
-
+                    error = int.TryParse(Console.ReadLine(), out n);
+                    if (error == false || n < 1)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Произошла ошибка, повторите ввод..." +
+                            "\nВозможные причины: количества элементов меньше 1 или вы ввели не целочисленное значение");
+                        System.Threading.Thread.Sleep(1000);
+                        Console.WriteLine("\nНажмите любую кнопку для продолжения...");
+                        Console.ReadKey();
+                    }
+                    else
+                        break;
+                }
                 a_sortbysteps = new int[n][];
 
                 for (int i = 0; i < n; i++)
@@ -1029,8 +1145,8 @@ namespace lab1_sort
                         bool accepted = false;
                         while (accepted == false)
                         {
-                            Console.Clear();
-                            while (true) { 
+                            while (true) {
+                                Console.Clear();
                                 Console.Write("Всего массивов: {0}\nВведите номер массива: ", a_sortbysteps.Length);
                                 error = int.TryParse(Console.ReadLine(), out number);
                                 if (error == false)
@@ -1063,11 +1179,11 @@ namespace lab1_sort
                                 Console.Write("{0}\t", item);
                             }
 
-
                             Console.Write("\nВведите номер элемента: ");
                             error = int.TryParse(Console.ReadLine(), out _index);
                             if (error == false)
                             {
+                                Console.Clear();
                                 Console.WriteLine("Произошла ошибка, повторите ввод...");
                                 System.Threading.Thread.Sleep(500);
                             }
@@ -1085,11 +1201,21 @@ namespace lab1_sort
                             }
                         }
                         _index--;
+                        while (true) {
+                            Console.Clear();
+                            Console.Write("Заменить число {0} на ", a_sortbysteps[number][_index]);
 
-                        Console.Write("\nЗаменить число {0} на ", a_sortbysteps[number][_index]);
+                            error = int.TryParse(Console.ReadLine(), out a_sortbysteps[number][_index]);
 
-                        error = int.TryParse(Console.ReadLine(), out a_sortbysteps[number][_index]);
-                        RightInputCheck(a_sortbysteps[number][_index].ToString(), error, 1);
+                            if (error == false)
+                            {
+                                Console.WriteLine("\nИзвините, но это не число");
+                                Console.WriteLine("\nНажмите любую клавишу, чтобы продолжить");
+                                Console.ReadKey();
+                            }
+                            else
+                                break;
+                        }
 
                         Console.Clear();
                         Console.WriteLine("Введите Enter, чтобы продолжить и ESQ чтобы выйти из редактора массивов.");
@@ -1119,6 +1245,8 @@ namespace lab1_sort
             }
 
             Console.WriteLine("\n\nМаксимальное значение: {0}\nМинимальное значение: {1}", max, min);
+
+            System.Threading.Thread.Sleep(2000);
             Console.WriteLine("\n\nНажмите любую клавишу для возвращения в главное меню");
             Console.ReadKey();
             Menu();
