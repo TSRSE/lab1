@@ -153,57 +153,31 @@ namespace lab1_sort
                 Program.Menu();
             } //Исключение на типизацию
 
-
-
             //ElementsTotalCounter
-            int linesToListCounter = 0;
-            for (int i = 0; i < LinesToRead.Length; i++) //На Каждую строку
-            {
-                while(LinesToRead[i].Length != 0) 
-                { 
-                    for (int j = 0; j < LinesToRead[i].IndexOf(';'); j++)
-                    {
-                        _Number += LinesToRead[i].ElementAt(j);
-                        LinesToRead[i].Replace(LinesToRead[i].ElementAt(j).ToString(), "");
-                    }
-
-                    try { 
-                        NumbersList.Add(int.Parse(_Number));
-                    }
-                    catch { }
-                    LinesToRead[i] = LinesToRead[i].Remove(0, _Number.Length + 1);
-
-                    _Number = "";
-                }
-
-                if (linesToListCounter < i)
-                {
-                    linesToListCounter++;
-                    NumbersList.Clear();
-                }
-
-                if (maxElemsInLines < NumbersList.Count)
-                {
-                    maxElemsInLines = NumbersList.Count;
-                }
-            }
-
-            //counter is ended
-
-
-            FullLineOfArray = "";
-            LinesToRead = File.ReadAllLines(default_path);
+            int numbersInLineCounter = 0;
             for (int i = 0; i < LinesToRead.Length; i++)
             {
-                FullLineOfArray = FullLineOfArray + LinesToRead[i];
+                foreach (char separator in LinesToRead[i])
+                {
+                    if (separator == ';')
+                        numbersInLineCounter++;
+                }
+                if(maxElemsInLines < numbersInLineCounter)
+                    maxElemsInLines = numbersInLineCounter;
+                numbersInLineCounter = 0;
             }
+            
+            //counter is ended
+            FullLineOfArray = "";
+            LinesToRead = File.ReadAllLines(default_path);
+
             if (InCaseOfArray == 1)
                 writeDuoArray1 = new int[LinesToRead.Length, maxElemsInLines];
             else if (InCaseOfArray == 2)
                 writeDuoArray2 = new int[LinesToRead.Length, maxElemsInLines];
 
             //SetArray
-            linesToListCounter = 0;
+            numbersInLineCounter = 0;
             for (int i = 0; i < LinesToRead.Length; i++) //На Каждую строку
             {
                 while (LinesToRead[i].Length != 0) //Пока не закончатся все элементы
@@ -214,6 +188,9 @@ namespace lab1_sort
                         LinesToRead[i].Replace(LinesToRead[i].ElementAt(j).ToString(), "");
                     }
 
+                    if (_Number.Replace(" ","").Replace(";","") == "")
+                        _Number = "0";
+
                     NumbersList.Add(int.Parse(_Number));
 
                     LinesToRead[i] = LinesToRead[i].Remove(0, _Number.Length + 1);
@@ -221,7 +198,7 @@ namespace lab1_sort
                     _Number = "";
                 }
                 //Переход на новую строку
-                if (linesToListCounter <= i)
+                if (numbersInLineCounter <= i)
                 {
 
                     for (int l = 0; l < maxElemsInLines; l++)
@@ -229,9 +206,9 @@ namespace lab1_sort
                         try
                         {
                             if(InCaseOfArray == 1)
-                                writeDuoArray1[linesToListCounter, l] = NumbersList.ElementAt(l);
+                                writeDuoArray1[numbersInLineCounter, l] = NumbersList.ElementAt(l);
                             else if (InCaseOfArray == 2)
-                                writeDuoArray2[linesToListCounter, l] = NumbersList.ElementAt(l);
+                                writeDuoArray2[numbersInLineCounter, l] = NumbersList.ElementAt(l);
                         }
                         catch
                         {
@@ -240,18 +217,17 @@ namespace lab1_sort
                                 NumbersList.Add(0);
                             }
                             if(InCaseOfArray == 1)
-                                writeDuoArray1[linesToListCounter, l] = 0;
+                                writeDuoArray1[numbersInLineCounter, l] = 0;
                             else if (InCaseOfArray == 2)
-                                writeDuoArray2[linesToListCounter, l] = 0;
+                                writeDuoArray2[numbersInLineCounter, l] = 0;
                         }
                     }
-                    linesToListCounter++;
+                    numbersInLineCounter++;
                     NumbersList.Clear();
                 }
             }
 
             //Writeing were ended
-
             try
             {
                 Console.Clear();
@@ -335,9 +311,13 @@ namespace lab1_sort
                         _Number += LinesToRead[i].ElementAt(j);
                         LinesToRead[i].Replace(LinesToRead[i].ElementAt(j).ToString(), "");
                     }
-
-                    NumbersList.Add(int.Parse(_Number));
-
+                    try { 
+                        NumbersList.Add(int.Parse(_Number));
+                    }
+                    catch
+                    {
+                        
+                    }
                     LinesToRead[i] = LinesToRead[i].Remove(0, _Number.Length + 1);
 
                     _Number = "";
@@ -378,7 +358,17 @@ namespace lab1_sort
                         LinesToRead[i].Replace(LinesToRead[i].ElementAt(j).ToString(), "");
                     }
 
-                    NumbersList.Add(int.Parse(_Number));
+                    try
+                    {
+                        NumbersList.Add(int.Parse(_Number));
+                    }
+                    catch
+                    {
+                        Console.Clear();
+                        Console.WriteLine("В {0} строке файла была допущена ошибка, \nвведите недостоющее значение или сотрите лишнюю ';'", i);
+                        Console.ReadKey();
+                        Program.Menu();
+                    }
 
                     LinesToRead[i] = LinesToRead[i].Remove(0, _Number.Length + 1);
 
@@ -431,7 +421,6 @@ namespace lab1_sort
     }
     class Program
     {
-        #region ничего
         static void AskForFileInput(string addString)
         {
             while (true)
@@ -1251,7 +1240,6 @@ namespace lab1_sort
             Console.ReadKey();
             Menu();
         } //Сортировка ступенчатого массива
-        #endregion
         static void Main(string[] args) => Menu();
     }
 }
