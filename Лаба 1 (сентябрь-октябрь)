@@ -1003,8 +1003,8 @@ namespace lab1_sort
             {
                 ReadFromFileRaw.ReadStepLinedArray();
                 a_sortbysteps = ReadFromFileRaw.writeStepArray;
-                //max = a_sortbysteps[0][0];
-                //min = a_sortbysteps[0][0];
+                max = a_sortbysteps[0][0];
+                min = a_sortbysteps[0][0];
                 n = a_sortbysteps.GetLength(0);
                 l = ReadFromFileRaw.writeStepArray[0].Length;
             }
@@ -1054,26 +1054,28 @@ namespace lab1_sort
                 {
                     for (int j = 0; j < a_sortbysteps[i].Length; j++)
                     {
-                        Console.Write("\nМассив {0}, элемент {1}: ", i + 1, j + 1);
+                        while (true) { 
+                            Console.Write("\nМассив {0}, элемент {1}: ", i + 1, j + 1);
 
-                        error = int.TryParse(Console.ReadLine(), out a_sortbysteps[i][j]);
-                        if (error == false)
-                        {
-                            Console.WriteLine("Произошла ошибка, повторите ввод...");
-                            System.Threading.Thread.Sleep(500);
-                        }
-                        else
-                        {
-                            max = a_sortbysteps[i][j];
-                            min = a_sortbysteps[i][j];
-                            break;
+                            error = int.TryParse(Console.ReadLine(), out a_sortbysteps[i][j]);
+                            if (error == false)
+                            {
+                                Console.WriteLine("Произошла ошибка, повторите ввод...");
+                                System.Threading.Thread.Sleep(500);
+                            }
+                            else
+                            {
+                                max = a_sortbysteps[i][j];
+                                min = a_sortbysteps[i][j];
+                                break;
+                            }
                         }
                     }
                 }
             }
             Console.Clear();
 
-            //ArrayEditor
+            //Редактор массива
             while (true)
             {
                 Console.Write("Перед тем, как продолжить, вы хотите изменить данные элементов в массиве?[Y/n]");
@@ -1144,10 +1146,11 @@ namespace lab1_sort
                             }
                         }
                         _index--;
+                        int numToChange = a_sortbysteps[number][_index];//вынес, потому что в цикле значения обнуляются
                         while (true)
                         {
                             Console.Clear();
-                            Console.Write("Заменить число {0} на ", a_sortbysteps[number][_index]);
+                            Console.Write("Заменить число {0} на ", numToChange);
 
                             error = int.TryParse(Console.ReadLine(), out a_sortbysteps[number][_index]);
 
