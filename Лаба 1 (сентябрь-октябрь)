@@ -37,12 +37,13 @@ namespace lab1_sort
             }
 
             LinesToRead = File.ReadAllLines(default_path);
+
             string FullLineOfArray = LinesToRead[0];
 
-            if (!FullLineOfArray.Contains("; "))
+            if (!FullLineOfArray.Contains(";"))
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Ошибка записи в файле, пожалуйста, проверьте введенные данные...\nПример рного ввода: 3; -1; 0; 80;", default_path);
+                Console.WriteLine("Ошибка записи в файле, пожалуйста, проверьте введенные данные...\nПример рного ввода: 3; -1; 0; 80;");
                 Console.ResetColor();
                 Console.WriteLine("Нажмите любую клавишу для возвращения в главное меню...");
                 Console.ReadKey();
@@ -50,20 +51,20 @@ namespace lab1_sort
             }
 
             //Чтение из файла
-            for (int i = 0; i < FullLineOfArray.LastIndexOf(';')+1; i++)
+            for (int i = 0; i < FullLineOfArray.LastIndexOf(';') + 1; i++)
             {
                 for (int j = 0; j < FullLineOfArray.IndexOf(';'); j++)
                 {
-                    _Number = _Number + FullLineOfArray.ElementAt(j);
+                    _Number += FullLineOfArray.ElementAt(j);
                     FullLineOfArray.Replace(FullLineOfArray.ElementAt(j).ToString(), "");
                 }
 
                 NumbersList.Add(int.Parse(_Number));
+
                 FullLineOfArray = FullLineOfArray.Remove(0, _Number.Length + 1);
 
                 _Number = "";
             }
-
             //Смотрим, что получилось
             try
             {
@@ -90,7 +91,7 @@ namespace lab1_sort
             string[] LinesToRead;
             string FullLineOfArray = "";
             string _Number = "";
-            string default_path = "";
+            string default_path;
             List<int> NumbersList = new List<int>();
             int maxElemsInLines = 0;
             if (InCaseOfArray == 1)
@@ -136,7 +137,7 @@ namespace lab1_sort
             //Проверка на хоть какую-то верность ввода данных пользователем в файл
             for (int i = 0; i < LinesToRead.Length; i++)
             {
-                FullLineOfArray = FullLineOfArray + LinesToRead[i];
+                FullLineOfArray += LinesToRead[i];
             }
 
             if (!FullLineOfArray.Contains("; "))
@@ -147,69 +148,97 @@ namespace lab1_sort
                 Console.WriteLine("Нажмите любую клавишу для возвращения в главное меню...");
                 Console.ReadKey();
                 Program.Menu();
-            } 
-
-            //Счетчик макс. кол-ва элементов в строках в массиве
-            int numbersInLineCounter = 0;
-            for (int i = 0; i < LinesToRead.Length; i++)
-            {
-                foreach (char separator in LinesToRead[i])
-                {
-                    if (separator == ';') numbersInLineCounter++;
-                }
-                if (maxElemsInLines < numbersInLineCounter) maxElemsInLines = numbersInLineCounter;
-                numbersInLineCounter = 0;
             }
-            //Счетчик закончился
-            FullLineOfArray = "";
-            LinesToRead = File.ReadAllLines(default_path);
-
-            //С каким массивом мы работаем на данный момент?
-            if (InCaseOfArray == 1) writeDuoArray1 = new int[LinesToRead.Length, maxElemsInLines];
-            else if (InCaseOfArray == 2) writeDuoArray2 = new int[LinesToRead.Length, maxElemsInLines];
-
-            //Присвоение элементов из файла в лист
-            numbersInLineCounter = 0;
-            for (int i = 0; i < LinesToRead.Length; i++) //На Каждую строку
-            {
-                while (LinesToRead[i].Length != 0) //Пока не закончатся все символы
+            try 
+            { 
+                //Счетчик макс. кол-ва элементов в строках в массиве
+                int numbersInLineCounter = 0;
+                for (int i = 0; i < LinesToRead.Length; i++)
                 {
-                    for (int j = 0; j < LinesToRead[i].IndexOf(';'); j++)
+                    foreach (char separator in LinesToRead[i])
                     {
-                        _Number += LinesToRead[i].ElementAt(j);
-                        LinesToRead[i].Replace(LinesToRead[i].ElementAt(j).ToString(), "");
+                        if (separator == ';') numbersInLineCounter++;
                     }
-
-                    if (_Number.Replace(" ", "").Replace(";", "") == "") _Number = "0";
-
-                    NumbersList.Add(int.Parse(_Number));
-
-                    LinesToRead[i] = LinesToRead[i].Remove(0, _Number.Length + 1);
-
-                    _Number = "";
+                    if (maxElemsInLines < numbersInLineCounter) maxElemsInLines = numbersInLineCounter;
+                    numbersInLineCounter = 0;
                 }
+                //Счетчик закончился
+                FullLineOfArray = "";
+                LinesToRead = File.ReadAllLines(default_path);
 
-                //Присвоение элементов из листа массиву
-                if (numbersInLineCounter <= i)
+                //С каким массивом мы работаем на данный момент?
+                if (InCaseOfArray == 1) writeDuoArray1 = new int[LinesToRead.Length, maxElemsInLines];
+                else if (InCaseOfArray == 2) writeDuoArray2 = new int[LinesToRead.Length, maxElemsInLines];
+
+                //Присвоение элементов из файла в лист
+                numbersInLineCounter = 0;
+                for (int i = 0; i < LinesToRead.Length; i++) //На Каждую строку
                 {
-                    for (int l = 0; l < maxElemsInLines; l++)
+                    while (LinesToRead[i].Length != 0) //Пока не закончатся все символы
                     {
+                        for (int j = 0; j < LinesToRead[i].IndexOf(';'); j++)
+                        {
+                            _Number += LinesToRead[i].ElementAt(j);
+                            LinesToRead[i].Replace(LinesToRead[i].ElementAt(j).ToString(), "");
+                        }
+
+                        if (_Number.Replace(" ", "").Replace(";", "") == "") _Number = "0";
+
                         try
                         {
-                            if (InCaseOfArray == 1) writeDuoArray1[numbersInLineCounter, l] = NumbersList.ElementAt(l);
-                            else if (InCaseOfArray == 2) writeDuoArray2[numbersInLineCounter, l] = NumbersList.ElementAt(l);
+                            NumbersList.Add(int.Parse(_Number));
                         }
-                        catch //если в данной строке нехватает элементов, заполню нулями
+                        catch
                         {
-                            if (InCaseOfArray == 1) writeDuoArray1[numbersInLineCounter, l] = 0;
-                            else if (InCaseOfArray == 2) writeDuoArray2[numbersInLineCounter, l] = 0;
+                            Console.WriteLine("Выдана ошибка, заполните его верно\nНажмите любую клавишу для продолжения");
+                            Console.ReadKey();
+                            Program.Menu();
                         }
+
+                        try
+                        {
+                            LinesToRead[i] = LinesToRead[i].Remove(0, _Number.Length + 1);
+                        }
+                        catch
+                        {
+                            Console.WriteLine("Выдана ошибка, заполните его верно\nНажмите любую клавишу для продолжения");
+                            Console.ReadKey();
+                            Program.Menu();
+                        }
+                    
+                        _Number = "";
                     }
-                    numbersInLineCounter++;
-                    NumbersList.Clear();
+
+                    //Присвоение элементов из листа массиву
+                    if (numbersInLineCounter <= i)
+                    {
+                        for (int l = 0; l < maxElemsInLines; l++)
+                        {
+                            try
+                            {
+                                if (InCaseOfArray == 1) writeDuoArray1[numbersInLineCounter, l] = NumbersList.ElementAt(l);
+                                else if (InCaseOfArray == 2) writeDuoArray2[numbersInLineCounter, l] = NumbersList.ElementAt(l);
+                            }
+                            catch //если в данной строке нехватает элементов, заполню нулями
+                            {
+                                if (InCaseOfArray == 1) writeDuoArray1[numbersInLineCounter, l] = 0;
+                                else if (InCaseOfArray == 2) writeDuoArray2[numbersInLineCounter, l] = 0;
+                            }
+                        }
+                        numbersInLineCounter++;
+                        NumbersList.Clear();
+                    }
                 }
             }
-
+            catch
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Ошибка записи в файле, пожалуйста, проверьте введенные данные...\nПример рного ввода: 3; -1; 0; 80;\n5; -11; 103; 11;" + "\nЗаметьте, что если элементов для ровного массива не будет хватать, пустые места займут нули", default_path);
+                Console.ResetColor();
+                Console.WriteLine("Нажмите любую клавишу для возвращения в главное меню...");
+                Console.ReadKey();
+                Program.Menu();
+            }
             //Все, мы записали, выдаем результат
             try
             {
@@ -235,8 +264,7 @@ namespace lab1_sort
             string FullLineOfArray = "";
             string _Number = "";
             List<int> NumbersList = new List<int>();
-            int c_lines,
-            maxElemsInLines = 0;
+            int maxElemsInLines = 0;
 
             string default_path = @"Arrays\multy.txt"; //Прямой путь к файлу, типизация файла: a; b; c;\na1; a2; a3;
             try
@@ -257,7 +285,7 @@ namespace lab1_sort
             LinesToRead = File.ReadAllLines(default_path);
             for (int i = 0; i < LinesToRead.Length; i++)
             {
-                FullLineOfArray = FullLineOfArray + LinesToRead[i];
+                FullLineOfArray += LinesToRead[i];
             }
 
             //Простая проверка на данные в файле
@@ -396,16 +424,14 @@ namespace lab1_sort
                     ReadFromFileRaw.readingfromfile = false;
                     break;
                 }
-
             }
             Console.Clear();
-        } //запрос на чтение из файла
+        } //Запрос на чтение из файла
         public static void Menu()
         {
             Directory.CreateDirectory("Arrays");
             Console.Title = "Лабораторная работа 1 | Сортировка массивов | Удалых Максим БПИ 20-9";
-            Int32 Coice = 0,
-            key = 0;
+            Int32 Coice = 0, key;
             do
             {
                 Console.Clear();
@@ -431,25 +457,25 @@ namespace lab1_sort
             }
             if (Coice == 0)
             {
-                sortByCodeSingle();
+                SortByCodeSingle();
             }
             Console.WriteLine(Coice);
             if (Coice == 1)
             {
-                sortByCodeArraySingle();
+                SortByCodeArraySingle();
             }
             Console.WriteLine(Coice);
             if (Coice == 2)
             {
-                sortByCodeDouble();
+                SortByCodeDouble();
             }
             Console.WriteLine(Coice);
             if (Coice == 3)
             {
-                sortByCodeStep();
+                SortByCodeStep();
             }
         } //Меню
-        static void sortByCodeSingle()
+        static void SortByCodeSingle()
         {
             bool error;
             int[] a_sortByCode;
@@ -623,7 +649,7 @@ namespace lab1_sort
             Console.ReadKey();
             Menu();
         } //Сортировка одномерного массива вручную
-        static void sortByCodeArraySingle()
+        static void SortByCodeArraySingle()
         {
             bool error;
             int n;
@@ -740,7 +766,7 @@ namespace lab1_sort
             Console.ReadKey();
             Menu();
         } //Сортировка одномерного массива с использованием методов сортировки Sys.Array
-        static void sortByCodeDouble()
+        static void SortByCodeDouble()
         {
             int n,m,n2,m2;
             bool error;
@@ -986,7 +1012,7 @@ namespace lab1_sort
             Console.ReadKey();
             Menu();
         } //Сортировка двумерного массива 
-        static void sortByCodeStep()
+        static void SortByCodeStep()
         {
             bool error;
             int _index = 0;
@@ -1177,7 +1203,7 @@ namespace lab1_sort
             Console.WriteLine("Вывожу массив...");
             for (int i = 0; i < a_sortbysteps.Length; i++)
             {
-                Console.Write("\nМассив {0}\n", i);
+                Console.Write("\nМассив {0}\n", i+1);
                 for (int j = 0; j < a_sortbysteps[i].Length; j++)
                 {
                     Console.Write("{0}\t", a_sortbysteps[i][j]);
